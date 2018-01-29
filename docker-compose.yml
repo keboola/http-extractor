@@ -1,0 +1,9 @@
+version: "2"
+services:
+  app:
+    build: .
+    image: keboola/ex-http
+    tty: true
+    stdin_open: true
+    environment:
+      - ROOT_PATH=/code

@@ -1,0 +1,12 @@
+sudo: false
+
+services:
+  - docker
+
+before_script:
+  - docker-compose -v
+  - docker-compose build app
+  - docker-compose run --rm app composer ci
+
+script:
+  - echo "ok"
