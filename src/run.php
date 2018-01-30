@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Keboola\HttpExtractor\Exception\UserException;
 
 require __DIR__ . '/../vendor/autoload.php';
