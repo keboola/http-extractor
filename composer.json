@@ -33,12 +33,13 @@
         "jakub-onderka/php-parallel-lint": "^0.9.2",
         "phpstan/phpstan-shim": "^0.9.2",
         "phpunit/phpunit": "^6.5",
+        "slevomat/coding-standard": "~4.0",
         "squizlabs/php_codesniffer": "~3.2"
     },
     "scripts": {
         "tests": "phpunit",
         "phpstan": "phpstan analyse ./src ./tests --level=max --no-progress",
-        "phpcs": "phpcs --standard=psr2 -n --ignore=vendor --extensions=php .",
+        "phpcs": "phpcs -n --ignore=vendor --extensions=php .",
         "phplint": "parallel-lint -j 10 --exclude vendor .",
         "build": [
             "@phplint",
