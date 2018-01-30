@@ -26,4 +26,25 @@ class ConfigTest extends TestCase
             'action' => 'run',
         ], $config->getData());
     }
+
+    public function testCreateFromArray(): void
+    {
+        $configArray = [
+            'parameters' => [
+                'downloadUrlBase' => 'http://google.com/',
+                'downloadUrlPath' => 'favicon.ico',
+            ],
+            'processors' => [
+                'before' => [],
+                'after' => [],
+            ],
+            'image_parameters' => [],
+            'action' => 'run',
+        ];
+        $config = Config::fromArray($configArray);
+        $this->assertSame([
+            'downloadUrlBase' => 'http://google.com/',
+            'downloadUrlPath' => 'favicon.ico',
+        ], $config->getData());
+    }
 }
