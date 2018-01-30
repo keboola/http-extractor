@@ -45,5 +45,7 @@ class ConfigTest extends TestCase
         $config = Config::fromArray($configArray);
 
         $this->assertSame('http://google.com/', $config->getDownloadUrlBase());
+        $this->assertSame('favicon.ico', $config->getDownloadUrlPath());
+        $this->assertSame('favicon-local.ico', $config->getSaveAs());
     }
 }

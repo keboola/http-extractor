@@ -46,4 +46,14 @@ class Config
     {
         return $this->config['downloadUrlBase'];
     }
+
+    public function getDownloadUrlPath(): string
+    {
+        return $this->config['downloadUrlPath'];
+    }
+
+    public function getSaveAs(): ?string
+    {
+        return $this->config['saveAs'];
+    }
 }

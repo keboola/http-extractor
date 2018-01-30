@@ -6,4 +6,7 @@ services:
     tty: true
     stdin_open: true
     environment:
-      - ROOT_PATH=/code
+        - KBC_DATADIR=/code/data/
+    volumes:
+        - ./:/code
+        - ./data:/data

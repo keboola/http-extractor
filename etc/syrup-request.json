@@ -1,0 +1,17 @@
+{
+    "configData": {
+        "storage": {
+            "input": {
+                "tables": [
+                    {
+                        "source": "in.c-main.sample",
+                        "destination": "source.csv"
+                    }
+                ]
+            }
+        },
+        "parameters": {
+            "multiplier": 4
+        }
+    }
+}
