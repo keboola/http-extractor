@@ -1,0 +1,11 @@
+{
+    "parameters": {
+        "downloadUrl": null
+    },
+    "processors": {
+        "before": [],
+        "after": []
+    },
+    "image_parameters": [],
+    "action": "run"
+}

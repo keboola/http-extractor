@@ -16,11 +16,17 @@
     ],
     "autoload": {
         "psr-4": {
-            "Keboola\\": "src/Keboola/"
+            "Keboola\\HttpExtractor\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Keboola\\HttpExtractor\\": "tests/"
         }
     },
     "require": {
-        "php": "~7.1"
+        "php": "~7.1",
+        "symfony/serializer": "~4.0"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^0.9.2",
