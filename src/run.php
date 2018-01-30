@@ -3,11 +3,7 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 
-$arguments = getopt("d::", ["data:"]);
-if (!isset($arguments['data'])) {
-    echo 'Data folder not set.' . "\n";
-    exit(1);
-}
+$dataDir = getenv('KBC_DATADIR') === false ? '/data/' : getenv('KBC_DATADIR');
 
 try {
     exit(0);
