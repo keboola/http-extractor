@@ -3,7 +3,11 @@
     "license": "MIT",
     "type": "project",
     "description": "Keboola HTTP Extractor",
-    "keywords": ["keboola", "http", "extractor"],
+    "keywords": [
+        "keboola",
+        "http",
+        "extractor"
+    ],
     "authors": [
         {
             "name": "Tomáš Fejfar",
