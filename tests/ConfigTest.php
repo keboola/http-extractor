@@ -15,15 +15,8 @@ class ConfigTest extends TestCase
         $config = Config::fromFile($configFilePath);
 
         $this->assertSame([
-            'parameters' => [
-                'downloadUrl' => null,
-            ],
-            'processors' => [
-                'before' => [],
-                'after' => [],
-            ],
-            'image_parameters' => [],
-            'action' => 'run',
+            'downloadUrlBase' => 'http://google.com/',
+            'downloadUrlPath' => 'favicon.ico',
         ], $config->getData());
     }
 
@@ -46,5 +39,24 @@ class ConfigTest extends TestCase
             'downloadUrlBase' => 'http://google.com/',
             'downloadUrlPath' => 'favicon.ico',
         ], $config->getData());
+    }
+
+    public function testCustomGetters(): void
+    {
+        $configArray = [
+            'parameters' => [
+                'downloadUrlBase' => 'http://google.com/',
+                'downloadUrlPath' => 'favicon.ico',
+            ],
+            'processors' => [
+                'before' => [],
+                'after' => [],
+            ],
+            'image_parameters' => [],
+            'action' => 'run',
+        ];
+        $config = Config::fromArray($configArray);
+
+        $this->assertSame('http://google.com/', $config->getDownloadUrlBase());
     }
 }

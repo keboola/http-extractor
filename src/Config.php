@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Keboola\HttpExtractor;
 
 use Keboola\HttpExtractor\Config\ConfigDefinition;
-use Keboola\HttpExtractor\Exception\UserException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -21,36 +20,30 @@ class Config
         $this->config = $config;
     }
 
-    public static function fromFile(string $configPath)
+    public static function fromFile(string $configPath): self
     {
         $contents = file_get_contents($configPath);
         $decoder = new JsonDecode(true);
         $config = $decoder->decode($contents, JsonEncoder::FORMAT);
-        return new self($config);
+
+        return self::fromArray($config['parameters']);
     }
 
-    public static function fromArray(array $config)
+    public static function fromArray(array $config): self
     {
         $definition = new ConfigDefinition();
         $processor = new Processor();
-        $processedConfig = $processor->processConfiguration($definition, [$config['parameters']]);
+        $processedConfig = $processor->processConfiguration($definition, [$config]);
         return new self($processedConfig);
     }
 
-    public function getData()
+    public function getData(): array
     {
         return $this->config;
     }
 
-    public function getHttpSource()
+    public function getDownloadUrlBase(): string
     {
-        $missingOutputFileException = new UserException('Extractor needs output file mapping to work');
-        if (!array_key_exists('output', $this->config)) {
-            throw $missingOutputFileException;
-        }
-        if (!array_key_exists('files', $this->config['output'])) {
-            throw $missingOutputFileException;
-        }
-        return $this->config['output']['files'][0];
+        return $this->config['downloadUrlBase'];
     }
 }
