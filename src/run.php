@@ -1,5 +1,7 @@
 <?php
 
+use Keboola\HttpExtractor\Exception\UserException;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 
@@ -9,7 +11,10 @@ $config = \Keboola\HttpExtractor\Config::fromFile($configPath);
 
 try {
     exit(0);
-} catch (Exception $e) {
+} catch (UserException $e) {
     echo $e->getMessage();
     exit(1);
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit(2);
 }

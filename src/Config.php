@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Keboola\HttpExtractor;
 
 use Keboola\HttpExtractor\Config\ConfigDefinition;
+use Keboola\HttpExtractor\Exception\UserException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -43,7 +44,7 @@ class Config
 
     public function getHttpSource()
     {
-        $missingOutputFileException = new Exception('Extractor needs output file mapping to work');
+        $missingOutputFileException = new UserException('Extractor needs output file mapping to work');
         if (!array_key_exists('output', $this->config)) {
             throw $missingOutputFileException;
         }
