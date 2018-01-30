@@ -37,6 +37,7 @@ class ConfigDefinitionTest extends TestCase
                 [
                     'downloadUrlBase' => 'http://www.google.com',
                     'downloadUrlPath' => 'path',
+                    'saveAs' => null,
                 ],
             ],
             'minimal config with saveAs' => [

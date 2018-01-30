@@ -25,6 +25,7 @@ class ConfigDefinition implements ConfigurationInterface
                     ->cannotBeEmpty()
                 ->end()
                 ->scalarNode('saveAs')
+                    ->defaultNull()
                 ->end()
             ->end()
         ;
