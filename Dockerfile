@@ -15,4 +15,4 @@ COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
 
 RUN composer install
 
-CMD php /code/run.php --data=/data
+CMD php /code/src/run.php --data=/data
