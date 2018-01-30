@@ -26,7 +26,7 @@
     },
     "scripts": {
         "tests": "phpunit",
-        "phpstan": "phpstan analyse ./src --level=max --no-progress",
+        "phpstan": "phpstan analyse ./src ./tests --level=max --no-progress",
         "phpcs": "phpcs --standard=psr2 -n --ignore=vendor --extensions=php .",
         "phplint": "parallel-lint -j 10 --exclude vendor .",
         "build": [
