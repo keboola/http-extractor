@@ -1,8 +1,8 @@
 version: "2"
 services:
-  app:
+  dev:
     build: .
-    image: keboola/ex-http
+    image: keboola/ex-http-dev
     tty: true
     stdin_open: true
     environment:
@@ -11,7 +11,7 @@ services:
         - ./:/code
         - ./data:/data
 
-  tests:
+  prod:
     build: .
     image: keboola/ex-http
     environment:

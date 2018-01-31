@@ -5,8 +5,15 @@ services:
 
 before_script:
   - docker-compose -v
-  - docker-compose build tests
-  - docker-compose run --rm tests composer ci
+  - docker-compose build prod
+  - docker-compose run --rm prod composer ci
 
 script:
-  - echo "ok"
+  - docker-compose build prod
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./deploy.sh
+  on:
+    tags: true
