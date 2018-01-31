@@ -4,9 +4,9 @@ services:
   - docker
 
 before_script:
-  - docker-compose -v
-  - docker-compose build prod
-  - docker-compose run --rm prod composer ci
+  - docker -v
+  - docker build -t keboola/ex-http .
+  - docker run keboola/ex-http composer ci
 
 script:
   - echo "Build successful"

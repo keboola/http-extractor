@@ -1,16 +1,9 @@
 version: "2"
 services:
+  # for development purposes
   dev:
     build: .
-    image: keboola/ex-http-dev
-    tty: true
-    stdin_open: true
-    environment:
-        - KBC_DATADIR=/code/data/
     volumes:
         - ./:/code
         - ./data:/data
-
-  prod:
-    build: .
-    image: keboola/ex-http
+    entrypoint: /bin/bash
