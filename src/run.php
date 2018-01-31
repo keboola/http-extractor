@@ -21,7 +21,7 @@ try {
 } catch (UserException $e) {
     echo $e->getMessage();
     exit(1);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     echo $e->getMessage();
     exit(2);
 }
