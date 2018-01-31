@@ -14,13 +14,14 @@ class ConfigDefinition implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('parameters');
         // @formatter:off
+        /** @noinspection NullPointerExceptionInspection */
         $rootNode
             ->children()
-                ->scalarNode('downloadUrlBase')
+                ->scalarNode('baseUrl')
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->scalarNode('downloadUrlPath')
+                ->scalarNode('path')
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()

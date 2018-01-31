@@ -16,8 +16,8 @@ class ConfigTest extends TestCase
         $config = Config::fromFile($configFilePath);
 
         $this->assertSame([
-            'downloadUrlBase' => 'http://google.com/',
-            'downloadUrlPath' => 'favicon.ico',
+            'baseUrl' => 'http://google.com/',
+            'path' => 'favicon.ico',
             'saveAs' => null,
         ], $config->getData());
     }
@@ -25,13 +25,13 @@ class ConfigTest extends TestCase
     public function testCreateFromArray(): void
     {
         $configArray = [
-            'downloadUrlBase' => 'http://google.com/',
-            'downloadUrlPath' => 'favicon.ico',
+            'baseUrl' => 'http://google.com/',
+            'path' => 'favicon.ico',
         ];
         $config = new Config($configArray);
         $this->assertSame([
-            'downloadUrlBase' => 'http://google.com/',
-            'downloadUrlPath' => 'favicon.ico',
+            'baseUrl' => 'http://google.com/',
+            'path' => 'favicon.ico',
             'saveAs' => null,
         ], $config->getData());
     }
@@ -39,14 +39,14 @@ class ConfigTest extends TestCase
     public function testCustomGetters(): void
     {
         $configArray = [
-            'downloadUrlBase' => 'http://google.com/',
-            'downloadUrlPath' => 'favicon.ico',
+            'baseUrl' => 'http://google.com/',
+            'path' => 'favicon.ico',
             'saveAs' => 'favicon-local.ico',
         ];
         $config = new Config($configArray);
 
-        $this->assertSame('http://google.com/', $config->getDownloadUrlBase());
-        $this->assertSame('favicon.ico', $config->getDownloadUrlPath());
+        $this->assertSame('http://google.com/', $config->getBaseUrl());
+        $this->assertSame('favicon.ico', $config->getPath());
         $this->assertSame('favicon-local.ico', $config->getSaveAs());
     }
 }

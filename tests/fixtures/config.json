@@ -1,7 +1,7 @@
 {
     "parameters": {
-        "downloadUrlBase": "http://google.com/",
-        "downloadUrlPath": "favicon.ico"
+        "baseUrl": "http://google.com/",
+        "path": "favicon.ico"
     },
     "processors": {
         "before": [],

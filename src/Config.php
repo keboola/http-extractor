@@ -37,14 +37,14 @@ class Config
         return $this->config;
     }
 
-    public function getDownloadUrlBase(): string
+    public function getBaseUrl(): string
     {
-        return $this->config['downloadUrlBase'];
+        return $this->config['baseUrl'];
     }
 
-    public function getDownloadUrlPath(): string
+    public function getPath(): string
     {
-        return $this->config['downloadUrlPath'];
+        return $this->config['path'];
     }
 
     public function getSaveAs(): ?string

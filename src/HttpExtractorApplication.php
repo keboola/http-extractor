@@ -31,7 +31,7 @@ class HttpExtractorApplication
 
     public function extract(): void
     {
-        $uri = new Uri($this->config->getDownloadUrlBase() . $this->config->getDownloadUrlPath());
+        $uri = new Uri($this->config->getBaseUrl() . $this->config->getPath());
         $this->httpExtractor->extract($uri, $this->getDestination($uri));
     }
 

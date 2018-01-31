@@ -32,24 +32,24 @@ class ConfigDefinitionTest extends TestCase
         return [
             'minimal config' => [
                 [
-                    'downloadUrlBase' => 'http://www.google.com',
-                    'downloadUrlPath' => 'path',
+                    'baseUrl' => 'http://www.google.com',
+                    'path' => 'path',
                 ],
                 [
-                    'downloadUrlBase' => 'http://www.google.com',
-                    'downloadUrlPath' => 'path',
+                    'baseUrl' => 'http://www.google.com',
+                    'path' => 'path',
                     'saveAs' => null,
                 ],
             ],
             'minimal config with saveAs' => [
                 [
-                    'downloadUrlBase' => 'http://www.google.com',
-                    'downloadUrlPath' => 'path',
+                    'baseUrl' => 'http://www.google.com',
+                    'path' => 'path',
                     'saveAs' => 'newFilename',
                 ],
                 [
-                    'downloadUrlBase' => 'http://www.google.com',
-                    'downloadUrlPath' => 'path',
+                    'baseUrl' => 'http://www.google.com',
+                    'path' => 'path',
                     'saveAs' => 'newFilename',
                 ],
             ],
@@ -82,26 +82,26 @@ class ConfigDefinitionTest extends TestCase
             'empty parameters' => [
                 [],
                 InvalidConfigurationException::class,
-                'The child node "downloadUrlBase" at path "parameters" must be configured.',
+                'The child node "baseUrl" at path "parameters" must be configured.',
             ],
             'missing url base' => [
                 [
-                    'downloadUrlPath' => 'path',
+                    'path' => 'path',
                 ],
                 InvalidConfigurationException::class,
-                'The child node "downloadUrlBase" at path "parameters" must be configured.',
+                'The child node "baseUrl" at path "parameters" must be configured.',
             ],
             'missing url path' => [
                 [
-                    'downloadUrlBase' => 'path',
+                    'baseUrl' => 'path',
                 ],
                 InvalidConfigurationException::class,
-                'The child node "downloadUrlPath" at path "parameters" must be configured.',
+                'The child node "path" at path "parameters" must be configured.',
             ],
             'unknown option' => [
                 [
-                    'downloadUrlBase' => 'http://www.google.com',
-                    'downloadUrlPath' => 'path',
+                    'baseUrl' => 'http://www.google.com',
+                    'path' => 'path',
                     'other' => false,
                 ],
                 InvalidConfigurationException::class,
