@@ -5,8 +5,8 @@ services:
 
 before_script:
   - docker-compose -v
-  - docker-compose build app
-  - docker-compose run --rm app composer ci
+  - docker-compose build tests
+  - docker-compose run --rm tests composer ci
 
 script:
   - echo "ok"

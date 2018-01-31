@@ -10,3 +10,11 @@ services:
     volumes:
         - ./:/code
         - ./data:/data
+
+  tests:
+    build: .
+    image: keboola/ex-http
+    environment:
+        - KBC_DATADIR=/code/data/
+    volumes:
+        - ./data:/data
