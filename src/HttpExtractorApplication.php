@@ -41,6 +41,6 @@ class HttpExtractorApplication
         if ($saveAs === null) {
             $saveAs = basename($uri->getPath());
         }
-        return $this->dataDir . 'out/files/' .  $saveAs;
+        return $this->dataDir . 'out/files/' . $saveAs;
     }
 }

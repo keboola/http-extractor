@@ -14,7 +14,6 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 use function sys_get_temp_dir;
-use function tmpfile;
 
 class HttpExtractorTest extends TestCase
 {
@@ -36,7 +35,7 @@ class HttpExtractorTest extends TestCase
         $historyItem = array_pop($this->history);
         /** @var Request $request */
         $request = $historyItem['request'];
-        $this->assertSame('http://example.com/result.txt', (string) $request->getUri());
+        $this->assertSame('http://example.com/result.txt', (string)$request->getUri());
     }
 
     private function getMockedGuzzle(array $responses): Client
