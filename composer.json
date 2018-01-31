@@ -21,7 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Keboola\\HttpExtractor\\": "tests/"
+            "Keboola\\HttpExtractor\\Tests\\": "tests/"
         }
     },
     "require": {

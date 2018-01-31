@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Keboola\HttpExtractor;
+namespace Keboola\HttpExtractor\Tests;
 
-use function file_get_contents;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -12,7 +11,9 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use Keboola\HttpExtractor\HttpExtractor;
 use PHPUnit\Framework\TestCase;
+use function file_get_contents;
 use function sys_get_temp_dir;
 
 class HttpExtractorTest extends TestCase

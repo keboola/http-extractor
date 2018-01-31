@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Keboola\HttpExtractor\Config;
+namespace Keboola\HttpExtractor\Tests\Config;
 
+use Keboola\HttpExtractor\Config\ConfigDefinition;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;

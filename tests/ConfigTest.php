@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Keboola\HttpExtractor;
+namespace Keboola\HttpExtractor\Tests;
 
-use Keboola\HttpExtractor\Config\ConfigDefinition;
+use Keboola\HttpExtractor\Config;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
