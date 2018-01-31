@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Keboola\HttpExtractor;
 
+use Keboola\HttpExtractor\Config\ConfigDefinition;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
@@ -27,7 +28,7 @@ class ConfigTest extends TestCase
             'downloadUrlBase' => 'http://google.com/',
             'downloadUrlPath' => 'favicon.ico',
         ];
-        $config = Config::fromArray($configArray);
+        $config = new Config($configArray);
         $this->assertSame([
             'downloadUrlBase' => 'http://google.com/',
             'downloadUrlPath' => 'favicon.ico',
@@ -42,7 +43,7 @@ class ConfigTest extends TestCase
             'downloadUrlPath' => 'favicon.ico',
             'saveAs' => 'favicon-local.ico',
         ];
-        $config = Config::fromArray($configArray);
+        $config = new Config($configArray);
 
         $this->assertSame('http://google.com/', $config->getDownloadUrlBase());
         $this->assertSame('favicon.ico', $config->getDownloadUrlPath());

@@ -14,27 +14,22 @@ class Config
     /** @var array */
     private $config;
 
-    private function __construct(
+    public function __construct(
         array $config
     ) {
-        $this->config = $config;
-    }
-
-    public static function fromFile(string $configPath): self
-    {
-        $contents = file_get_contents($configPath);
-        $decoder = new JsonDecode(true);
-        $config = $decoder->decode($contents, JsonEncoder::FORMAT);
-
-        return self::fromArray($config['parameters']);
-    }
-
-    public static function fromArray(array $config): self
-    {
         $definition = new ConfigDefinition();
         $processor = new Processor();
         $processedConfig = $processor->processConfiguration($definition, [$config]);
-        return new self($processedConfig);
+        $this->config = $processedConfig;
+    }
+
+    public static function fromFile(string $configFilePath): self
+    {
+        $contents = file_get_contents($configFilePath);
+        $decoder = new JsonDecode(true);
+        $config = $decoder->decode($contents, JsonEncoder::FORMAT);
+
+        return new self($config['parameters']);
     }
 
     public function getData(): array
