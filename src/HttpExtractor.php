@@ -21,13 +21,7 @@ class HttpExtractor
 
     public function extract(UriInterface $httpSource, string $filesystemDestination): void
     {
-        if (!is_writable(dirname($filesystemDestination))) {
-            throw new \InvalidArgumentException(sprintf(
-                'Output path "%s" is not writable, cannot download. ',
-                $filesystemDestination
-            ));
-        }
-        $response = $this->client->get($httpSource, ['sink' => $filesystemDestination]);
+        $this->client->get($httpSource, ['sink' => $filesystemDestination]);
         // will throw exception for HTTP errors, no need to signal back
     }
 }
