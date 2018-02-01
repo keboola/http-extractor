@@ -49,6 +49,13 @@ class Config
 
     public function getSaveAs(): ?string
     {
+        $isEmptyString = $this->config['saveAs'] === '';
+        $isNull = $this->config['saveAs'] === null;
+
+        // can't use empty() as "0" is valid value
+        if ($isEmptyString || $isNull) {
+            return null;
+        }
         return $this->config['saveAs'];
     }
 }

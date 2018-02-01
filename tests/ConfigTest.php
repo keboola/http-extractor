@@ -49,4 +49,48 @@ class ConfigTest extends TestCase
         $this->assertSame('favicon.ico', $config->getPath());
         $this->assertSame('favicon-local.ico', $config->getSaveAs());
     }
+
+    /**
+     * @dataProvider provideConfigAndExpectedForSaveAs
+     */
+    public function testGetSaveAsBehavior(?string $expected, array $configArray): void
+    {
+        $config = new Config($configArray);
+
+        $this->assertSame($expected, $config->getSaveAs());
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public function provideConfigAndExpectedForSaveAs(): array
+    {
+        return [
+            'empty string '=> [
+                null,
+                [
+                    'baseUrl' => 'http://google.com/',
+                    'path' => 'favicon.ico',
+                    'saveAs' => '',
+                ],
+            ],
+            'null'=> [
+                null,
+                [
+                    'baseUrl' => 'http://google.com/',
+                    'path' => 'favicon.ico',
+                    'saveAs' => null,
+                ],
+            ],
+            'string'=> [
+                'file.txt',
+                [
+                    'baseUrl' => 'http://google.com/',
+                    'path' => 'favicon.ico',
+                    'saveAs' => 'file.txt',
+                ],
+            ],
+
+        ];
+    }
 }
