@@ -9,16 +9,7 @@
          stopOnFailure="false"
          syntaxCheck="false"
          bootstrap="tests/bootstrap.php">
-
     <testsuite name="Main Test">
         <directory>tests/</directory>
     </testsuite>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/</directory>
-        </whitelist>
-        <exclude>./src/run.php</exclude>
-    </filter>
-
 </phpunit>
