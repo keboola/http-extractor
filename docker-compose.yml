@@ -6,4 +6,3 @@ services:
     volumes:
         - ./:/code
         - ./data:/data
-    entrypoint: /bin/bash
