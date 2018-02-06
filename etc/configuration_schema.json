@@ -1,0 +1,36 @@
+{
+    "title": "Parameters",
+    "type": "object",
+    "required": [
+        "baseUrl",
+        "path",
+        "saveAs"
+    ],
+    "properties": {
+        "baseUrl": {
+            "title": "Base URL",
+            "type": "string",
+            "format": "url",
+            "description": "Common prefix for all downloaded resources",
+            "minLength": 1,
+            "default": "",
+            "propertyOrder": 1
+        },
+        "path": {
+            "title": "Path",
+            "type": "string",
+            "description": "Path to the downloaded resource",
+            "minLength": 1,
+            "default": "",
+            "propertyOrder": 2
+        },
+        "saveAs": {
+            "title": "Save as",
+            "type": "string",
+            "description": "Filename to save the resource as",
+            "minLength": 1,
+            "default": "",
+            "propertyOrder": 3
+        }
+    }
+}
