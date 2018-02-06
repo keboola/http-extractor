@@ -15,8 +15,8 @@ eval $(docker run --rm \
     ecr:get-login ${KBC_DEVELOPERPORTAL_VENDOR} ${KBC_DEVELOPERPORTAL_APP})
 
 # Push to the repository
-docker tag ${APP_IMAGE}:latest ${REPOSITORY}:${TRAVIS_TAG}
-docker tag ${APP_IMAGE}:latest ${REPOSITORY}:latest
+docker tag ${REPOSITORY}:${TRAVIS_COMMIT} ${REPOSITORY}:${TRAVIS_TAG}
+docker tag ${REPOSITORY}:${TRAVIS_COMMIT} ${REPOSITORY}:latest
 docker push ${REPOSITORY}:${TRAVIS_TAG}
 docker push ${REPOSITORY}:latest
 

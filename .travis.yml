@@ -15,8 +15,8 @@ jobs:
     - stage: build-and-push
       script:
         # build
-        - docker build -t keboola/ex-http .
-        - docker run keboola/ex-http composer ci
+        - docker build -t $APP_IMAGE .
+        - docker run $APP_IMAGE composer ci
 
         # push
         - docker pull quay.io/keboola/developer-portal-cli-v2:latest
