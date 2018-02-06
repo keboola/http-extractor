@@ -49,6 +49,7 @@ jobs:
           quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_WITHOUT_SAVE_AS_HTTPS $TRAVIS_COMMIT
     - stage: deploy
       deploy:
+        script: true
         provider: script
         skip_cleanup: true
         script: ./deploy.sh
