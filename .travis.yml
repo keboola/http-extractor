@@ -3,46 +3,44 @@ sudo: false
 services:
   - docker
 
+before-script:
+  # build
+  - docker -v
+  - docker build -t keboola/ex-http .
+  - docker run keboola/ex-http composer ci
+  # push
+  - docker pull quay.io/keboola/developer-portal-cli-v2:latest
+  - >-
+    export REPOSITORY=`docker run
+    --rm
+    -e KBC_DEVELOPERPORTAL_USERNAME
+    -e KBC_DEVELOPERPORTAL_PASSWORD
+    -e KBC_DEVELOPERPORTAL_URL
+    quay.io/keboola/developer-portal-cli-v2:latest ecr:get-repository $KBC_DEVELOPERPORTAL_VENDOR $KBC_DEVELOPERPORTAL_APP`
+  - docker tag $APP_IMAGE:latest $REPOSITORY:$TRAVIS_BUILD_ID
+  - >-
+    eval $(docker run
+    --rm
+    -e KBC_DEVELOPERPORTAL_USERNAME
+    -e KBC_DEVELOPERPORTAL_PASSWORD
+    -e KBC_DEVELOPERPORTAL_URL
+    quay.io/keboola/developer-portal-cli-v2:latest ecr:get-login $KBC_DEVELOPERPORTAL_VENDOR $KBC_DEVELOPERPORTAL_APP)
+script:
+  - docker push $REPOSITORY:$TRAVIS_BUILD_ID
+
 jobs:
   include:
-    - stage: build-and-push
-      before-script:
-        # build
-        - docker -v
-        - docker build -t keboola/ex-http .
-        - docker run keboola/ex-http composer ci
-        # push
-        - docker pull quay.io/keboola/developer-portal-cli-v2:latest
-        - >-
-          export REPOSITORY=`docker run
-          --rm
-          -e KBC_DEVELOPERPORTAL_USERNAME
-          -e KBC_DEVELOPERPORTAL_PASSWORD
-          -e KBC_DEVELOPERPORTAL_URL
-          quay.io/keboola/developer-portal-cli-v2:latest ecr:get-repository $KBC_DEVELOPERPORTAL_VENDOR $KBC_DEVELOPERPORTAL_APP`
-        - docker tag $APP_IMAGE:latest $REPOSITORY:$TRAVIS_BUILD_ID
-        - >-
-          eval $(docker run
-          --rm
-          -e KBC_DEVELOPERPORTAL_USERNAME
-          -e KBC_DEVELOPERPORTAL_PASSWORD
-          -e KBC_DEVELOPERPORTAL_URL
-          quay.io/keboola/developer-portal-cli-v2:latest ecr:get-login $KBC_DEVELOPERPORTAL_VENDOR $KBC_DEVELOPERPORTAL_APP)
-      script:
-        - docker push $REPOSITORY:$TRAVIS_BUILD_ID
     - stage: integration
-      before-script:
-        - docker pull quay.io/keboola/syrup-cli:latest
       script:
+        - docker pull quay.io/keboola/syrup-cli:latest
         - >-
           docker run
           --rm
           -e KBC_STORAGE_TOKEN
           quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_WITH_SAVE_AS_HTTP $TRAVIS_BUILD_ID
     - stage: integration
-      before-script:
-        - docker pull quay.io/keboola/syrup-cli:latest
       script:
+        - docker pull quay.io/keboola/syrup-cli:latest
         - >-
           docker run
           --rm
