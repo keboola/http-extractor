@@ -40,7 +40,7 @@ jobs:
           --rm
           -e KBC_STORAGE_TOKEN
           quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_WITH_SAVE_AS_HTTP $TRAVIS_COMMIT
-      script:
+    - script:
         - docker pull quay.io/keboola/syrup-cli:latest
         - >-
           docker run
