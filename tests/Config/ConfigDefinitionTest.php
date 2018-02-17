@@ -32,25 +32,33 @@ class ConfigDefinitionTest extends TestCase
         return [
             'minimal config' => [
                 [
-                    'baseUrl' => 'http://www.google.com',
-                    'path' => 'path',
+                    'parameters' => [
+                        'baseUrl' => 'http://www.google.com',
+                        'path' => 'path',
+                    ],
                 ],
                 [
-                    'baseUrl' => 'http://www.google.com',
-                    'path' => 'path',
-                    'saveAs' => null,
+                    'parameters' => [
+                        'baseUrl' => 'http://www.google.com',
+                        'path' => 'path',
+                        'saveAs' => null,
+                    ],
                 ],
             ],
             'minimal config with saveAs' => [
                 [
-                    'baseUrl' => 'http://www.google.com',
-                    'path' => 'path',
-                    'saveAs' => 'newFilename',
+                    'parameters' => [
+                        'baseUrl' => 'http://www.google.com',
+                        'path' => 'path',
+                        'saveAs' => 'newFilename',
+                    ],
                 ],
                 [
-                    'baseUrl' => 'http://www.google.com',
-                    'path' => 'path',
-                    'saveAs' => 'newFilename',
+                    'parameters' => [
+                        'baseUrl' => 'http://www.google.com',
+                        'path' => 'path',
+                        'saveAs' => 'newFilename',
+                    ],
                 ],
             ],
         ];
@@ -80,32 +88,40 @@ class ConfigDefinitionTest extends TestCase
     {
         return [
             'empty parameters' => [
-                [],
+                [
+                    'parameters' => [],
+                ],
                 InvalidConfigurationException::class,
-                'The child node "baseUrl" at path "parameters" must be configured.',
+                'The child node "baseUrl" at path "root.parameters" must be configured.',
             ],
             'missing url base' => [
                 [
-                    'path' => 'path',
+                    'parameters' => [
+                        'path' => 'path',
+                    ],
                 ],
                 InvalidConfigurationException::class,
-                'The child node "baseUrl" at path "parameters" must be configured.',
+                'The child node "baseUrl" at path "root.parameters" must be configured.',
             ],
             'missing url path' => [
                 [
-                    'baseUrl' => 'path',
+                    'parameters' => [
+                        'baseUrl' => 'path',
+                    ],
                 ],
                 InvalidConfigurationException::class,
-                'The child node "path" at path "parameters" must be configured.',
+                'The child node "path" at path "root.parameters" must be configured.',
             ],
             'unknown option' => [
                 [
-                    'baseUrl' => 'http://www.google.com',
-                    'path' => 'path',
-                    'other' => false,
+                    'parameters' => [
+                        'baseUrl' => 'http://www.google.com',
+                        'path' => 'path',
+                        'other' => false,
+                    ],
                 ],
                 InvalidConfigurationException::class,
-                'Unrecognized option "other" under "parameters"',
+                'Unrecognized option "other" under "root.parameters"',
             ],
         ];
     }

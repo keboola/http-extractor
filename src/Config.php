@@ -4,58 +4,27 @@ declare(strict_types=1);
 
 namespace Keboola\HttpExtractor;
 
-use Keboola\HttpExtractor\Config\ConfigDefinition;
-use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Serializer\Encoder\JsonDecode;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Keboola\Component\Config\BaseConfig;
 
-class Config
+class Config extends BaseConfig
 {
-    /** @var array */
-    private $config;
-
-    public function __construct(
-        array $config
-    ) {
-        $definition = new ConfigDefinition();
-        $processor = new Processor();
-        $processedConfig = $processor->processConfiguration($definition, [$config]);
-        $this->config = $processedConfig;
-    }
-
-    public static function fromFile(string $configFilePath): self
-    {
-        $contents = file_get_contents($configFilePath);
-        $decoder = new JsonDecode(true);
-        $config = $decoder->decode($contents, JsonEncoder::FORMAT);
-
-        return new self($config['parameters']);
-    }
-
-    public function getData(): array
-    {
-        return $this->config;
-    }
-
     public function getBaseUrl(): string
     {
-        return $this->config['baseUrl'];
+        return $this->getValue(['parameters', 'baseUrl']);
     }
 
     public function getPath(): string
     {
-        return $this->config['path'];
+        return $this->getValue(['parameters', 'path']);
     }
 
     public function getSaveAs(): ?string
     {
-        $isEmptyString = $this->config['saveAs'] === '';
-        $isNull = $this->config['saveAs'] === null;
-
+        $saveAs = $this->getValue(['parameters', 'saveAs'], '');
         // can't use empty() as "0" is valid value
-        if ($isEmptyString || $isNull) {
+        if ($saveAs === '') {
             return null;
         }
-        return $this->config['saveAs'];
+        return $saveAs;
     }
 }

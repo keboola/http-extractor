@@ -9,39 +9,14 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
-    public function testCreateFromFile(): void
-    {
-        $configFilePath = __DIR__ . '/fixtures/config.json';
-
-        $config = Config::fromFile($configFilePath);
-
-        $this->assertSame([
-            'baseUrl' => 'http://google.com/',
-            'path' => 'favicon.ico',
-            'saveAs' => null,
-        ], $config->getData());
-    }
-
-    public function testCreateFromArray(): void
-    {
-        $configArray = [
-            'baseUrl' => 'http://google.com/',
-            'path' => 'favicon.ico',
-        ];
-        $config = new Config($configArray);
-        $this->assertSame([
-            'baseUrl' => 'http://google.com/',
-            'path' => 'favicon.ico',
-            'saveAs' => null,
-        ], $config->getData());
-    }
-
     public function testCustomGetters(): void
     {
         $configArray = [
-            'baseUrl' => 'http://google.com/',
-            'path' => 'favicon.ico',
-            'saveAs' => 'favicon-local.ico',
+            'parameters' => [
+                'baseUrl' => 'http://google.com/',
+                'path' => 'favicon.ico',
+                'saveAs' => 'favicon-local.ico',
+            ],
         ];
         $config = new Config($configArray);
 
@@ -66,28 +41,34 @@ class ConfigTest extends TestCase
     public function provideConfigAndExpectedForSaveAs(): array
     {
         return [
-            'empty string '=> [
+            'empty string ' => [
                 null,
                 [
-                    'baseUrl' => 'http://google.com/',
-                    'path' => 'favicon.ico',
-                    'saveAs' => '',
+                    'parameters' => [
+                        'baseUrl' => 'http://google.com/',
+                        'path' => 'favicon.ico',
+                        'saveAs' => '',
+                    ],
                 ],
             ],
-            'null'=> [
+            'null' => [
                 null,
                 [
-                    'baseUrl' => 'http://google.com/',
-                    'path' => 'favicon.ico',
-                    'saveAs' => null,
+                    'parameters' => [
+                        'baseUrl' => 'http://google.com/',
+                        'path' => 'favicon.ico',
+                        'saveAs' => null,
+                    ],
                 ],
             ],
-            'string'=> [
+            'string' => [
                 'file.txt',
                 [
-                    'baseUrl' => 'http://google.com/',
-                    'path' => 'favicon.ico',
-                    'saveAs' => 'file.txt',
+                    'parameters' => [
+                        'baseUrl' => 'http://google.com/',
+                        'path' => 'favicon.ico',
+                        'saveAs' => 'file.txt',
+                    ],
                 ],
             ],
 

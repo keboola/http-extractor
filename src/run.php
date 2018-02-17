@@ -2,21 +2,14 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Client;
-use Keboola\HttpExtractor\Exception\UserException;
-use Keboola\HttpExtractor\HttpExtractorApplication;
+use Keboola\Component\UserException;
+use Keboola\HttpExtractor\HttpExtractorComponent;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$dataDir = getenv('KBC_DATADIR') === false ? '/data/' : getenv('KBC_DATADIR');
-$configPath = $dataDir . 'config.json';
-$config = \Keboola\HttpExtractor\Config::fromFile($configPath);
-
 try {
-    $client = new Client();
-    $httpExtractor = new Keboola\HttpExtractor\HttpExtractor($client);
-    $app = new HttpExtractorApplication($config, $httpExtractor, $dataDir);
-    $app->extract();
+    $app = new HttpExtractorComponent();
+    $app->run();
     exit(0);
 } catch (UserException $e) {
     echo $e->getMessage();
