@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace Keboola\HttpExtractor\Config;
 
+use Keboola\Component\Config\BaseConfigDefinition;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class ConfigDefinition implements ConfigurationInterface
+class ConfigDefinition extends BaseConfigDefinition
 {
-    public function getConfigTreeBuilder(): TreeBuilder
+    /**
+     * @return ArrayNodeDefinition|NodeDefinition
+     */
+    protected function getParametersDefinition()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('parameters');
+        $builder = new TreeBuilder();
+        /** @var ArrayNodeDefinition $parametersNode */
+        $parametersNode = $builder->root('parameters');
         // @formatter:off
         /** @noinspection NullPointerExceptionInspection */
-        $rootNode
+        $parametersNode
             ->children()
                 ->scalarNode('baseUrl')
                     ->isRequired()
@@ -31,6 +37,6 @@ class ConfigDefinition implements ConfigurationInterface
             ->end()
         ;
         // @formatter:on
-        return $treeBuilder;
+        return $parametersNode;
     }
 }
