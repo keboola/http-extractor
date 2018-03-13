@@ -41,23 +41,6 @@ class ConfigDefinitionTest extends TestCase
                     'parameters' => [
                         'baseUrl' => 'http://www.google.com',
                         'path' => 'path',
-                        'saveAs' => null,
-                    ],
-                ],
-            ],
-            'minimal config with saveAs' => [
-                [
-                    'parameters' => [
-                        'baseUrl' => 'http://www.google.com',
-                        'path' => 'path',
-                        'saveAs' => 'newFilename',
-                    ],
-                ],
-                [
-                    'parameters' => [
-                        'baseUrl' => 'http://www.google.com',
-                        'path' => 'path',
-                        'saveAs' => 'newFilename',
                     ],
                 ],
             ],

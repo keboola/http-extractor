@@ -31,9 +31,6 @@ class ConfigDefinition extends BaseConfigDefinition
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->scalarNode('saveAs')
-                    ->defaultNull()
-                ->end()
             ->end()
         ;
         // @formatter:on

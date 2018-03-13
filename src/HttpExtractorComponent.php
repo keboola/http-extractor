@@ -35,12 +35,6 @@ class HttpExtractorComponent extends BaseComponent
 
     private function getDestination(UriInterface $uri): string
     {
-        /** @var Config $config */
-        $config = $this->getConfig();
-        $saveAs = $config->getSaveAs();
-        if ($saveAs === null) {
-            $saveAs = basename($uri->getPath());
-        }
-        return $this->getDataDir() . '/out/files/' . $saveAs;
+        return $this->getDataDir() . '/out/files/' . basename($uri->getPath());
     }
 }

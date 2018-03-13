@@ -17,14 +17,4 @@ class Config extends BaseConfig
     {
         return $this->getValue(['parameters', 'path']);
     }
-
-    public function getSaveAs(): ?string
-    {
-        $saveAs = $this->getValue(['parameters', 'saveAs'], '');
-        // can't use empty() as "0" is valid value
-        if ($saveAs === '') {
-            return null;
-        }
-        return $saveAs;
-    }
 }

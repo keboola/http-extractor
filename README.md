@@ -12,7 +12,6 @@ Download files from any public URL to `/data/out/files`.
 
 - `baseUrl` (required) -- common part of URL
 - `path` (required) -- path part of URL (futureproof to allow row configs)
-- `saveAs` (optional) -- filename to save file in `/data/out/files`. If empty file name from URL is used. 
 
 ### Sample configurations
 
@@ -28,20 +27,6 @@ Download files from any public URL to `/data/out/files`.
 ```
 
 This will save Google favicon into `/data/out/files/favicon.ico`. 
-
-#### Config with custom file name
-
-```json
-{
-    "parameters": {
-        "baseUrl": "https://www.google.com/",
-        "path": "favicon.ico",
-        "saveAs": "google-favicon.ico"
-    }
-}
-```
-
-This will save Google favicon into `/data/out/files/google-favicon.ico`.
 
 ## Development
 
