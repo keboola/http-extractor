@@ -3,8 +3,7 @@
     "type": "object",
     "required": [
         "baseUrl",
-        "path",
-        "saveAs"
+        "path"
     ],
     "properties": {
         "baseUrl": {
@@ -23,14 +22,6 @@
             "minLength": 1,
             "default": "",
             "propertyOrder": 2
-        },
-        "saveAs": {
-            "title": "Save as",
-            "type": "string",
-            "description": "Filename to save the resource as",
-            "minLength": 1,
-            "default": "",
-            "propertyOrder": 3
         }
     }
 }
