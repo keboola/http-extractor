@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Keboola\HttpExtractor\Tests;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use Keboola\Component\UserException;
 use Keboola\HttpExtractor\HttpExtractor;
 use Keboola\Temp\Temp;
 use PHPUnit\Framework\TestCase;
@@ -83,23 +82,23 @@ class HttpExtractorTest extends TestCase
         return [
             [
                 new Response(404, [], ''),
-                ClientException::class,
-                'Client error: `GET http://example.com` resulted in a `404 Not Found` response',
+                UserException::class,
+                'Server returned HTTP 404 for "http://example.com"',
             ],
             [
                 new Response(401, [], ''),
-                ClientException::class,
-                'Client error: `GET http://example.com` resulted in a `401 Unauthorized` response',
+                UserException::class,
+                'Server returned HTTP 401 for "http://example.com"',
             ],
             [
                 new Response(500, [], ''),
-                ServerException::class,
-                'Server error: `GET http://example.com` resulted in a `500 Internal Server Error` response',
+                UserException::class,
+                'Server returned HTTP 500 for "http://example.com"',
             ],
             [
                 new Response(503, [], ''),
-                ServerException::class,
-                'Server error: `GET http://example.com` resulted in a `503 Service Unavailable` response',
+                UserException::class,
+                'Server returned HTTP 503 for "http://example.com"',
             ],
         ];
     }

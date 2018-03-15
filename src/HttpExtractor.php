@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Keboola\HttpExtractor;
 
-use function dirname;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use Keboola\Component\UserException;
 use Psr\Http\Message\UriInterface;
 
 class HttpExtractor
@@ -21,7 +23,15 @@ class HttpExtractor
 
     public function extract(UriInterface $httpSource, string $filesystemDestination): void
     {
-        $this->client->get($httpSource, ['sink' => $filesystemDestination]);
+        try {
+            $this->client->get($httpSource, ['sink' => $filesystemDestination]);
+        } catch (ClientException|ServerException $e) {
+            throw new UserException(sprintf(
+                'Server returned HTTP %s for "%s"',
+                $e->getCode(),
+                (string)$httpSource
+            ), 0, $e);
+        }
         // will throw exception for HTTP errors, no need to signal back
     }
 }
