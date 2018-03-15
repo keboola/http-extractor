@@ -21,7 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Keboola\\HttpExtractor\\Tests\\": "tests/"
+            "Keboola\\HttpExtractor\\Tests\\": "tests/phpunit/"
         }
     },
     "require": {
@@ -41,7 +41,10 @@
         "symfony/process": "^4.0"
     },
     "scripts": {
-        "tests": "phpunit",
+        "tests": [
+            "@tests-phpunit"
+        ],
+        "tests-phpunit": "phpunit",
         "phpstan": "phpstan analyse ./src ./tests --level=max --no-progress -c phpstan.neon",
         "phpcs": "phpcs -n --ignore=vendor --extensions=php .",
         "phplint": "parallel-lint -j 10 --exclude vendor .",

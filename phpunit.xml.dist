@@ -8,8 +8,8 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="tests/bootstrap.php">
+         bootstrap="tests/phpunit/bootstrap.php">
     <testsuite name="Main Test">
-        <directory>tests/</directory>
+        <directory>tests/phpunit/</directory>
     </testsuite>
 </phpunit>
