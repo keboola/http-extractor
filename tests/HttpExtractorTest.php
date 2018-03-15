@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Keboola\HttpExtractor\Tests;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -109,10 +108,10 @@ class HttpExtractorTest extends TestCase
         $extractor = new HttpExtractor($client);
         $temp = new Temp();
 
-        $this->expectException(ConnectException::class);
+        $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'cURL error 6: Could not resolve host: domain.nonexistent ' .
-            '(see http://curl.haxx.se/libcurl/c/libcurl-errors.html)'
+            'Error requesting "http://domain.nonexistent/index.html":' .
+            ' cURL error 6: Could not resolve host: domain.nonexistent'
         );
 
         $extractor->extract(
