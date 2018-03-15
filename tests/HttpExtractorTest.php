@@ -6,7 +6,8 @@ namespace Keboola\HttpExtractor\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -14,6 +15,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
 use Keboola\HttpExtractor\HttpExtractor;
+use Keboola\Temp\Temp;
 use PHPUnit\Framework\TestCase;
 use function file_get_contents;
 use function sys_get_temp_dir;
@@ -41,21 +43,25 @@ class HttpExtractorTest extends TestCase
         $this->assertSame('http://example.com/result.txt', (string)$request->getUri());
     }
 
-    public function testExtractThrowsExceptionFor404Response(): void
-    {
-        $resource = new Uri('http://example.com/result.txt');
-        $content = 'File contents';
-        $mockedResponse = new Response(404, [], $content);
+    /**
+     * @dataProvider provideUrlsAndExceptions
+     */
+    public function testHttpExceptions(
+        Response $mockedResponse,
+        string $exceptionClass,
+        string $exceptionMessagePart
+    ): void {
         $client = $this->getMockedGuzzle([$mockedResponse]);
         $extractor = new HttpExtractor($client);
-        $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
+        $temp = new Temp();
 
-        $this->expectException(ClientException::class);
-        $this->expectExceptionMessage(
-            'Client error: `GET http://example.com/result.txt` resulted in a `404 Not Found` response'
+        $this->expectException($exceptionClass);
+        $this->expectExceptionMessage($exceptionMessagePart);
+
+        $extractor->extract(
+            new Uri('http://example.com'),
+            $temp->createTmpFile()->getPathname()
         );
-
-        $extractor->extract($resource, $destination);
     }
 
     private function getMockedGuzzle(array $responses): Client
@@ -67,5 +73,52 @@ class HttpExtractorTest extends TestCase
         $stack = HandlerStack::create($mock);
         $stack->push($history);
         return new Client(['handler' => $stack]);
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public function provideUrlsAndExceptions(): array
+    {
+        return [
+            [
+                new Response(404, [], ''),
+                ClientException::class,
+                'Client error: `GET http://example.com` resulted in a `404 Not Found` response',
+            ],
+            [
+                new Response(401, [], ''),
+                ClientException::class,
+                'Client error: `GET http://example.com` resulted in a `401 Unauthorized` response',
+            ],
+            [
+                new Response(500, [], ''),
+                ServerException::class,
+                'Server error: `GET http://example.com` resulted in a `500 Internal Server Error` response',
+            ],
+            [
+                new Response(503, [], ''),
+                ServerException::class,
+                'Server error: `GET http://example.com` resulted in a `503 Service Unavailable` response',
+            ],
+        ];
+    }
+
+    public function testThrowsUserExceptionForNonexistentHost(): void
+    {
+        $client = new Client();
+        $extractor = new HttpExtractor($client);
+        $temp = new Temp();
+
+        $this->expectException(ConnectException::class);
+        $this->expectExceptionMessage(
+            'cURL error 6: Could not resolve host: domain.nonexistent ' .
+            '(see http://curl.haxx.se/libcurl/c/libcurl-errors.html)'
+        );
+
+        $extractor->extract(
+            new Uri('http://domain.nonexistent/index.html'),
+            $temp->createTmpFile()->getPathname()
+        );
     }
 }
