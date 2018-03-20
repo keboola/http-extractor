@@ -21,7 +21,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Keboola\\HttpExtractor\\Tests\\": "tests/"
+            "Keboola\\HttpExtractor\\Tests\\": "tests/phpunit/"
         }
     },
     "require": {
@@ -37,10 +37,16 @@
         "phpstan/phpstan-shim": "^0.9.2",
         "phpunit/phpunit": "^6.5",
         "slevomat/coding-standard": "~4.0",
-        "squizlabs/php_codesniffer": "~3.2"
+        "squizlabs/php_codesniffer": "~3.2",
+        "symfony/process": "^4.0"
     },
     "scripts": {
-        "tests": "phpunit",
+        "tests": [
+            "@tests-phpunit",
+            "@tests-functional"
+        ],
+        "tests-phpunit": "phpunit",
+        "tests-functional": "php ./tests/functional/run.php",
         "phpstan": "phpstan analyse ./src ./tests --level=max --no-progress -c phpstan.neon",
         "phpcs": "phpcs -n --ignore=vendor --extensions=php .",
         "phplint": "parallel-lint -j 10 --exclude vendor .",
