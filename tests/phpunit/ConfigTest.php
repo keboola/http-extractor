@@ -17,7 +17,7 @@ class ConfigTest extends TestCase
                 'path' => 'favicon.ico',
             ],
         ];
-        $config = new Config($configArray);
+        $config = new Config($configArray, new Config\ConfigDefinition());
 
         $this->assertSame('http://google.com/', $config->getBaseUrl());
         $this->assertSame('favicon.ico', $config->getPath());

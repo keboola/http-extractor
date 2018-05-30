@@ -1,8 +1,7 @@
-version: "2"
+version: '2'
 services:
-  # for development purposes
   dev:
     build: .
     volumes:
-        - ./:/code
-        - ./data:/data
+      - ./:/code
+      - ./data:/data

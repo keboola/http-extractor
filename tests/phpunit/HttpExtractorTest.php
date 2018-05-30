@@ -38,7 +38,7 @@ class HttpExtractorTest extends TestCase
         $historyItem = array_pop($this->history);
         /** @var Request $request */
         $request = $historyItem['request'];
-        $this->assertSame('http://example.com/result.txt', (string)$request->getUri());
+        $this->assertSame('http://example.com/result.txt', (string) $request->getUri());
     }
 
     /**
