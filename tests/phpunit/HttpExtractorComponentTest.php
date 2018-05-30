@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Keboola\HttpExtractor;
+namespace Keboola\HttpExtractor\Tests;
 
+use Keboola\HttpExtractor\HttpExtractorComponent;
 use PHPUnit\Framework\TestCase;
 
 class HttpExtractorComponentTest extends TestCase

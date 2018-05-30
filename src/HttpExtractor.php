@@ -38,6 +38,7 @@ class HttpExtractor
         } catch (ConnectException $e) {
             $userErrors = [
                 CURLE_COULDNT_RESOLVE_HOST,
+                CURLE_COULDNT_RESOLVE_PROXY,
                 CURLE_COULDNT_CONNECT,
                 CURLE_OPERATION_TIMEOUTED,
                 CURLE_SSL_CONNECT_ERROR,

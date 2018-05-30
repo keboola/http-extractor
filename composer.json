@@ -25,11 +25,12 @@
         }
     },
     "require": {
-        "guzzlehttp/guzzle": "~6.3",
-        "symfony/config": "~4.0",
-        "symfony/serializer": "~4.0",
         "PHP": "^7.1",
-        "keboola/php-component": "^4.1"
+        "guzzlehttp/guzzle": "~6.3",
+        "keboola/php-component": "^4.1",
+        "keboola/php-utils": "^2.3",
+        "symfony/config": "~4.0",
+        "symfony/serializer": "~4.0"
     },
     "require-dev": {
         "jakub-onderka/php-parallel-lint": "^1.0",
