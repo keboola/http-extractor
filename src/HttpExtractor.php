@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\TooManyRedirectsException;
 use Keboola\Component\UserException;
 use Psr\Http\Message\UriInterface;
 use function in_array;
@@ -53,6 +54,12 @@ class HttpExtractor
                 (string) $httpSource,
                 $curlErrorNumber,
                 $curlErrorMessage
+            ), 0, $e);
+        } catch (TooManyRedirectsException $e) {
+            throw new UserException(sprintf(
+                'Too many redirects requesting "%s": %s',
+                (string) $httpSource,
+                $e->getMessage()
             ), 0, $e);
         }
         // will throw exception for HTTP errors, no need to signal back
