@@ -9,7 +9,7 @@
          stopOnFailure="false"
          syntaxCheck="false"
          bootstrap="tests/phpunit/bootstrap.php">
-    <testsuite name="Main Test">
-        <directory>tests/phpunit/</directory>
+    <testsuite name="Main Test Suite">
+        <directory>tests/phpunit</directory>
     </testsuite>
 </phpunit>

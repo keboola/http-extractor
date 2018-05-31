@@ -1,6 +1,2 @@
-vendor/
-./data
-.idea/
-build/
-.env
-data/*
+/vendor
+/.idea

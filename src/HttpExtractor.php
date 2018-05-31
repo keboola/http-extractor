@@ -10,8 +10,8 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use Keboola\Component\UserException;
 use Psr\Http\Message\UriInterface;
-use const CURLE_COULDNT_RESOLVE_HOST;
 use function in_array;
+use const CURLE_COULDNT_RESOLVE_HOST;
 
 class HttpExtractor
 {
@@ -32,7 +32,7 @@ class HttpExtractor
             throw new UserException(sprintf(
                 'Server returned HTTP %s for "%s"',
                 $e->getCode(),
-                (string)$httpSource
+                (string) $httpSource
             ), 0, $e);
         } catch (ConnectException $e) {
             $userErrors = [
@@ -50,7 +50,7 @@ class HttpExtractor
             $curlErrorMessage = $e->getHandlerContext()['error'];
             throw new UserException(sprintf(
                 'Error requesting "%s": cURL error %s: %s',
-                (string)$httpSource,
+                (string) $httpSource,
                 $curlErrorNumber,
                 $curlErrorMessage
             ), 0, $e);
