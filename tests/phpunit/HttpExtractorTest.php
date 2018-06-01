@@ -41,6 +41,27 @@ class HttpExtractorTest extends TestCase
         $this->assertSame('http://example.com/result.txt', (string) $request->getUri());
     }
 
+    public function testTooManyRedirects(): void
+    {
+        $resource = new Uri('http://example.com/result.txt');
+        $content = 'File contents';
+        $mockedResponses = [];
+        for ($i = 0; $i <= 6; $i++) {
+            $mockedResponses[] = new Response(301, ['Location' => 'http://other-url'], $content);
+        }
+
+        $client = $this->getMockedGuzzle($mockedResponses);
+        $extractor = new HttpExtractor($client);
+        $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(
+            'Too many redirects requesting "http://example.com/result.txt": Will not follow more than 5 redirects'
+        );
+
+        $extractor->extract($resource, $destination);
+    }
+
     /**
      * @dataProvider provideUrlsAndExceptions
      */
