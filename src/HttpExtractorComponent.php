@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Keboola\HttpExtractor;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use Keboola\Component\BaseComponent;
 use Keboola\HttpExtractor\Config\ConfigDefinition;
@@ -34,8 +33,7 @@ class HttpExtractorComponent extends BaseComponent
 
     public function run(): void
     {
-        $client = new Client();
-        $httpExtractor = new HttpExtractor($client);
+        $httpExtractor = new HttpExtractor(new Client());
 
         $uri = new Uri($this->getDownloadUrl());
         $httpExtractor->extract($uri, $this->getDestination($uri));
