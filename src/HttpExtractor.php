@@ -53,11 +53,16 @@ class HttpExtractor
                 CURLE_GOT_NOTHING,
                 CURLE_RECV_ERROR,
             ];
-            $curlErrorNumber = $e->getHandlerContext()['errno'];
+            $context = $e->getHandlerContext();
+            if (!isset($context['errno'])) {
+                throw $e;
+            }
+
+            $curlErrorNumber = $context['errno'];
             if (!in_array($curlErrorNumber, $userErrors)) {
                 throw $e;
             }
-            $curlErrorMessage = $e->getHandlerContext()['error'];
+            $curlErrorMessage = $context['error'];
             throw new UserException(sprintf(
                 'Error requesting "%s": cURL error %s: %s',
                 (string) $httpSource,
