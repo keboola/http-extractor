@@ -7,6 +7,8 @@ namespace Keboola\HttpExtractor;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TooManyRedirectsException;
 use Keboola\Component\UserException;
@@ -41,7 +43,7 @@ class HttpExtractor
                 (string) $httpSource,
                 $e->getMessage()
             ), 0, $e);
-        } catch (ConnectException $e) {
+        } catch (RequestException $e) {
             $userErrors = [
                 CURLE_COULDNT_RESOLVE_HOST,
                 CURLE_COULDNT_RESOLVE_PROXY,
@@ -61,6 +63,12 @@ class HttpExtractor
                 (string) $httpSource,
                 $curlErrorNumber,
                 $curlErrorMessage
+            ), 0, $e);
+        } catch (GuzzleException $e) {
+            throw new UserException(sprintf(
+                'Error requesting "%s": Guzzle error: %s',
+                (string) $httpSource,
+                $e->getMessage()
             ), 0, $e);
         }
         // will throw exception for HTTP errors, no need to signal back

@@ -48,7 +48,7 @@ class RetryDecider
 
     private function isRecoverableException(?RequestException $exception = null): bool
     {
-        if (!$exception instanceof ConnectException) {
+        if (!$exception instanceof RequestException) {
             return false;
         }
 
