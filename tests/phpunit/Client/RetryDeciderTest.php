@@ -57,7 +57,12 @@ class RetryDeciderTest extends TestCase
                 3,
                 null,
                 null,
-                new ConnectException('Err', new Request('get', '/'), null, ['errno' => \CURLE_COULDNT_CONNECT]),
+                new ConnectException(
+                    'Err',
+                    new Request('get', '/'),
+                    null,
+                    ['errno' => \CURLE_COULDNT_CONNECT]
+                ),
             ],
             'retry for connect exception with CURLE 56 code and less than max retries' => [
                 true,
@@ -77,14 +82,24 @@ class RetryDeciderTest extends TestCase
                 3,
                 null,
                 null,
-                new ConnectException('Err', new Request('get', '/'), null, ['errno' => \CURLE_BAD_DOWNLOAD_RESUME]),
+                new ConnectException(
+                    'Err',
+                    new Request('get', '/'),
+                    null,
+                    ['errno' => \CURLE_BAD_DOWNLOAD_RESUME]
+                ),
             ],
             'no retry for connect exception and more than max retries' => [
                 false,
                 6,
                 null,
                 null,
-                new ConnectException('Err', new Request('get', '/'), null, ['errno' => \CURLE_COULDNT_CONNECT]),
+                new ConnectException(
+                    'Err',
+                    new Request('get', '/'),
+                    null,
+                    ['errno' => \CURLE_COULDNT_CONNECT]
+                ),
 
             ],
             'retry with header 10 minutes in future' => [
