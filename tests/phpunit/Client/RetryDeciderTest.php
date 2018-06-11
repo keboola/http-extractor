@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Keboola\HttpExtractor\Tests\Client;
 
 use DateTimeImmutable;
+use Exception;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
@@ -57,6 +58,19 @@ class RetryDeciderTest extends TestCase
                 null,
                 null,
                 new ConnectException('Err', new Request('get', '/'), null, ['errno' => \CURLE_COULDNT_CONNECT]),
+            ],
+            'retry for connect exception with CURLE 56 code and less than max retries' => [
+                true,
+                3,
+                null,
+                null,
+                new RequestException(
+                    'Err',
+                    new Request('get', '/'),
+                    null,
+                    new Exception(),
+                    ['errno' => \CURLE_RECV_ERROR]
+                ),
             ],
             'retry for connect exception with incorrect code and less than max retries' => [
                 false,
