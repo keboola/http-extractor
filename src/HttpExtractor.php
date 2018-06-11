@@ -35,6 +35,12 @@ class HttpExtractor
                 $e->getCode(),
                 (string) $httpSource
             ), 0, $e);
+        } catch (TooManyRedirectsException $e) {
+            throw new UserException(sprintf(
+                'Too many redirects requesting "%s": %s',
+                (string) $httpSource,
+                $e->getMessage()
+            ), 0, $e);
         } catch (ConnectException $e) {
             $userErrors = [
                 CURLE_COULDNT_RESOLVE_HOST,
@@ -55,12 +61,6 @@ class HttpExtractor
                 (string) $httpSource,
                 $curlErrorNumber,
                 $curlErrorMessage
-            ), 0, $e);
-        } catch (TooManyRedirectsException $e) {
-            throw new UserException(sprintf(
-                'Too many redirects requesting "%s": %s',
-                (string) $httpSource,
-                $e->getMessage()
             ), 0, $e);
         }
         // will throw exception for HTTP errors, no need to signal back
