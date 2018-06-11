@@ -28,7 +28,8 @@ class RetryDeciderTest extends TestCase
         $decider = new RetryDecider();
         $this->assertSame(
             $expected,
-            $decider($retries, $request, $response, $exception)
+            $decider($retries, $request, $response, $exception),
+            'Failed asserting whether to retry'
         );
     }
 
