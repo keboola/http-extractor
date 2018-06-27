@@ -7,6 +7,8 @@ namespace Keboola\HttpExtractor;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TooManyRedirectsException;
 use Keboola\Component\UserException;
@@ -35,7 +37,13 @@ class HttpExtractor
                 $e->getCode(),
                 (string) $httpSource
             ), 0, $e);
-        } catch (ConnectException $e) {
+        } catch (TooManyRedirectsException $e) {
+            throw new UserException(sprintf(
+                'Too many redirects requesting "%s": %s',
+                (string) $httpSource,
+                $e->getMessage()
+            ), 0, $e);
+        } catch (RequestException $e) {
             $userErrors = [
                 CURLE_COULDNT_RESOLVE_HOST,
                 CURLE_COULDNT_RESOLVE_PROXY,
@@ -45,20 +53,25 @@ class HttpExtractor
                 CURLE_GOT_NOTHING,
                 CURLE_RECV_ERROR,
             ];
-            $curlErrorNumber = $e->getHandlerContext()['errno'];
+            $context = $e->getHandlerContext();
+            if (!isset($context['errno'])) {
+                throw $e;
+            }
+
+            $curlErrorNumber = $context['errno'];
             if (!in_array($curlErrorNumber, $userErrors)) {
                 throw $e;
             }
-            $curlErrorMessage = $e->getHandlerContext()['error'];
+            $curlErrorMessage = $context['error'];
             throw new UserException(sprintf(
                 'Error requesting "%s": cURL error %s: %s',
                 (string) $httpSource,
                 $curlErrorNumber,
                 $curlErrorMessage
             ), 0, $e);
-        } catch (TooManyRedirectsException $e) {
+        } catch (GuzzleException $e) {
             throw new UserException(sprintf(
-                'Too many redirects requesting "%s": %s',
+                'Error requesting "%s": Guzzle error: %s',
                 (string) $httpSource,
                 $e->getMessage()
             ), 0, $e);
