@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Keboola\HttpExtractor\Config;
 
+use function is_numeric;
 use Keboola\Component\Config\BaseConfigDefinition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -27,6 +28,17 @@ class ConfigDefinition extends BaseConfigDefinition
                 ->scalarNode('path')
                     ->isRequired()
                     ->cannotBeEmpty()
+                ->end()
+                ->arrayNode('client_options')
+                    ->children()
+                        ->scalarNode('max_redirects')
+                        ->validate()
+                            ->ifTrue(function ($value) {
+                                return !is_numeric($value) || $value < 0;
+                            })
+                            ->thenInvalid('Max redirects must be positive integer')
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;

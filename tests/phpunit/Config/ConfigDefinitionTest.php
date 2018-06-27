@@ -106,6 +106,20 @@ class ConfigDefinitionTest extends TestCase
                 InvalidConfigurationException::class,
                 'Unrecognized option "other" under "root.parameters"',
             ],
+            'invalid max redirects' => [
+                [
+                    'parameters' => [
+                        'baseUrl' => 'http://www.google.com',
+                        'path' => 'path',
+                        'client_options' => [
+                            'max_redirects' => '',
+                        ],
+                    ],
+                ],
+                InvalidConfigurationException::class,
+                'Invalid configuration for path "root.parameters.client_options.max_redirects": ' .
+                'Max redirects must be positive integer',
+            ],
         ];
     }
 }
