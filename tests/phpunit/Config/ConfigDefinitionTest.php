@@ -111,13 +111,11 @@ class ConfigDefinitionTest extends TestCase
                     'parameters' => [
                         'baseUrl' => 'http://www.google.com',
                         'path' => 'path',
-                        'clientOptions' => [
-                            'maxRedirects' => '',
-                        ],
+                        'maxRedirects' => '',
                     ],
                 ],
                 InvalidConfigurationException::class,
-                'Invalid configuration for path "root.parameters.clientOptions.maxRedirects": ' .
+                'Invalid configuration for path "root.parameters.maxRedirects": ' .
                 'Max redirects must be positive integer',
             ],
         ];

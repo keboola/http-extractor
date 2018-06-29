@@ -29,16 +29,12 @@ class ConfigDefinition extends BaseConfigDefinition
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->arrayNode('clientOptions')
-                    ->children()
-                        ->scalarNode('maxRedirects')
-                        ->validate()
-                            ->ifTrue(function ($value) {
-                                return !is_numeric($value) || $value < 0;
-                            })
-                            ->thenInvalid('Max redirects must be positive integer')
-                        ->end()
-                    ->end()
+                ->scalarNode('maxRedirects')
+                    ->validate()
+                        ->ifTrue(function ($value) {
+                            return !is_numeric($value) || $value < 0;
+                        })
+                        ->thenInvalid('Max redirects must be positive integer')
                 ->end()
             ->end()
         ;

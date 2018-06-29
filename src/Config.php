@@ -18,7 +18,11 @@ class Config extends BaseConfig
      */
     public function getClientOptions(): array
     {
-        return $this->getValue(['parameters', 'clientOptions'], []);
+        $options = [];
+        if ($this->getValue(['parameters', 'maxRedirects'], false)) {
+            $options['maxRedirects'] = $this->getValue(['parameters', 'maxRedirects']);
+        }
+        return $options;
     }
 
     public function getPath(): string
