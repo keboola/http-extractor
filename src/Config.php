@@ -18,7 +18,7 @@ class Config extends BaseConfig
      */
     public function getClientOptions(): array
     {
-        return $this->getValue(['parameters', 'client_options'], []);
+        return $this->getValue(['parameters', 'clientOptions'], []);
     }
 
     public function getPath(): string

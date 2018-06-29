@@ -51,7 +51,7 @@ class HttpExtractorTest extends TestCase
         }
 
         $client = $this->getMockedGuzzle($mockedResponses);
-        $extractor = new HttpExtractor($client, ['max_redirects' => 2]);
+        $extractor = new HttpExtractor($client, ['maxRedirects' => 2]);
         $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
 
         $this->expectException(UserException::class);

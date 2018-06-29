@@ -91,9 +91,9 @@ class HttpExtractor
     private function getRequestOptions(): array
     {
         $requestOptions = [];
-        if (isset($this->clientOptions['max_redirects'])) {
+        if (isset($this->clientOptions['maxRedirects'])) {
             $requestOptions['allow_redirects'] = [
-                'max' => $this->clientOptions['max_redirects'],
+                'max' => $this->clientOptions['maxRedirects'],
             ];
         }
         return $requestOptions;

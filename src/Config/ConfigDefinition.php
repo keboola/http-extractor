@@ -29,9 +29,9 @@ class ConfigDefinition extends BaseConfigDefinition
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->arrayNode('client_options')
+                ->arrayNode('clientOptions')
                     ->children()
-                        ->scalarNode('max_redirects')
+                        ->scalarNode('maxRedirects')
                         ->validate()
                             ->ifTrue(function ($value) {
                                 return !is_numeric($value) || $value < 0;
