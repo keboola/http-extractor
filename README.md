@@ -12,6 +12,7 @@ Download files from any public URL to `/data/out/files`.
 
 - `baseUrl` (required) -- common part of URL
 - `path` (required) -- path part of URL (futureproof to allow row configs)
+- `maxRedirects` (optional) -- maximum number of redirects to follow
 
 ### Sample configurations
 

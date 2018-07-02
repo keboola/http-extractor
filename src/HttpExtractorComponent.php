@@ -33,7 +33,9 @@ class HttpExtractorComponent extends BaseComponent
 
     public function run(): void
     {
-        $httpExtractor = new HttpExtractor(new Client());
+        /** @var Config $config */
+        $config = $this->getConfig();
+        $httpExtractor = new HttpExtractor(new Client(), $config->getClientOptions());
 
         $uri = new Uri($this->getDownloadUrl());
         $httpExtractor->extract($uri, $this->getDestination($uri));

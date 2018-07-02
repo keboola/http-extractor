@@ -6,7 +6,6 @@ namespace Keboola\HttpExtractor;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
@@ -21,16 +20,23 @@ class HttpExtractor
     /** @var Client */
     private $client;
 
+    /** @var array */
+    private $clientOptions;
+
     public function __construct(
-        Client $client
+        Client $client,
+        array $clientOptions
     ) {
         $this->client = $client;
+        $this->clientOptions = $clientOptions;
     }
 
     public function extract(UriInterface $httpSource, string $filesystemDestination): void
     {
         try {
-            $this->client->get($httpSource, ['sink' => $filesystemDestination]);
+            $requestOptions = $this->getRequestOptions();
+            $requestOptions['sink'] = $filesystemDestination;
+            $this->client->get($httpSource, $requestOptions);
         } catch (ClientException|ServerException $e) {
             throw new UserException(sprintf(
                 'Server returned HTTP %s for "%s"',
@@ -77,5 +83,19 @@ class HttpExtractor
             ), 0, $e);
         }
         // will throw exception for HTTP errors, no need to signal back
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function getRequestOptions(): array
+    {
+        $requestOptions = [];
+        if (isset($this->clientOptions['maxRedirects'])) {
+            $requestOptions['allow_redirects'] = [
+                'max' => $this->clientOptions['maxRedirects'],
+            ];
+        }
+        return $requestOptions;
     }
 }

@@ -29,7 +29,7 @@ class HttpExtractorTest extends TestCase
         $content = 'File contents';
         $mockedResponse = new Response(200, [], $content);
         $client = $this->getMockedGuzzle([$mockedResponse]);
-        $extractor = new HttpExtractor($client);
+        $extractor = new HttpExtractor($client, []);
         $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
 
         $extractor->extract($resource, $destination);
@@ -51,12 +51,12 @@ class HttpExtractorTest extends TestCase
         }
 
         $client = $this->getMockedGuzzle($mockedResponses);
-        $extractor = new HttpExtractor($client);
+        $extractor = new HttpExtractor($client, ['maxRedirects' => 2]);
         $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'Too many redirects requesting "http://example.com/result.txt": Will not follow more than 5 redirects'
+            'Too many redirects requesting "http://example.com/result.txt": Will not follow more than 2 redirects'
         );
 
         $extractor->extract($resource, $destination);
@@ -71,7 +71,7 @@ class HttpExtractorTest extends TestCase
         string $exceptionMessagePart
     ): void {
         $client = $this->getMockedGuzzle([$mockedResponse]);
-        $extractor = new HttpExtractor($client);
+        $extractor = new HttpExtractor($client, []);
         $temp = new Temp();
 
         $this->expectException($exceptionClass);
@@ -126,7 +126,7 @@ class HttpExtractorTest extends TestCase
     public function testThrowsUserExceptionForNonexistentHost(): void
     {
         $client = new Client();
-        $extractor = new HttpExtractor($client);
+        $extractor = new HttpExtractor($client, []);
         $temp = new Temp();
 
         $this->expectException(UserException::class);
