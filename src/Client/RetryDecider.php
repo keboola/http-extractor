@@ -73,6 +73,7 @@ class RetryDecider
             CURLE_COULDNT_RESOLVE_PROXY,
             CURLE_GOT_NOTHING,
             CURLE_OPERATION_TIMEOUTED,
+            CURLE_PARTIAL_FILE,
             CURLE_RECV_ERROR,
             CURLE_SSL_CONNECT_ERROR,
         ]);
