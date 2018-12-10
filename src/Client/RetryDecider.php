@@ -68,13 +68,13 @@ class RetryDecider
     {
         // https://github.com/curl/curl/blob/571280678594c4ccfbfcad854c76e02d0e350809/src/tool_operate.c#L1541
         return in_array($curlErrorNumber, [
-            CURLE_COULDNT_RESOLVE_PROXY,
-            CURLE_COULDNT_RESOLVE_HOST,
             CURLE_COULDNT_CONNECT,
-            CURLE_OPERATION_TIMEOUTED,
-            CURLE_SSL_CONNECT_ERROR,
+            CURLE_COULDNT_RESOLVE_HOST,
+            CURLE_COULDNT_RESOLVE_PROXY,
             CURLE_GOT_NOTHING,
+            CURLE_OPERATION_TIMEOUTED,
             CURLE_RECV_ERROR,
+            CURLE_SSL_CONNECT_ERROR,
         ]);
     }
 
