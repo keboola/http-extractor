@@ -78,6 +78,19 @@ class RetryDeciderTest extends TestCase
                     ['errno' => \CURLE_RECV_ERROR]
                 ),
             ],
+            'retry for request exception with CURLE_PARTIAL_FILE code' => [
+                true,
+                3,
+                null,
+                null,
+                new RequestException(
+                    'cURL error 18: transfer closed with 93525720 bytes remaining to read',
+                    new Request('get', '/'),
+                    null,
+                    null,
+                    ['errno' => \CURLE_PARTIAL_FILE]
+                ),
+            ],
             'retry for connect exception with incorrect code and less than max retries' => [
                 false,
                 3,
