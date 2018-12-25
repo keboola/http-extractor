@@ -5,16 +5,24 @@ declare(strict_types=1);
 namespace Keboola\HttpExtractor\Client;
 
 use DateTimeImmutable;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Psr\Log\LoggerInterface;
 use function in_array;
 use function Keboola\Utils\isValidDateTimeString;
 
 class RetryDecider
 {
     private const MAX_RETRIES = 5;
+
+    /** @var LoggerInterface */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     public function __invoke(
         int $retries,
@@ -23,18 +31,32 @@ class RetryDecider
         ?RequestException $exception = null
     ): bool {
         if ($retries >= self::MAX_RETRIES) {
+            $this->logger->info('Max retries exceeded');
             return false;
         }
 
         if ($this->shouldAbortBasedOnRetryAfterHeader($response)) {
+            $this->logger->info('Aborting due to Retry-After header value');
             return false;
         }
 
         if ($this->isRecoverableHttpStatus($response)) {
+            if ($response) {
+                $this->logger->info(sprintf(
+                    'Retrying based on "%s" HTTP status',
+                    $response->getStatusCode()
+                ));
+            }
             return true;
         }
 
         if ($this->isRecoverableException($exception)) {
+            if ($exception instanceof RequestException) {
+                $this->logger->info(sprintf(
+                    'Retrying based on CURL error code "%s"',
+                    $exception->getHandlerContext()['errno']
+                ));
+            }
             return true;
         }
 
