@@ -31,12 +31,12 @@ class RetryDecider
         ?RequestException $exception = null
     ): bool {
         if ($retries >= self::MAX_RETRIES) {
-            $this->logger->info('Max retries exceeded');
+            $this->logger->info('Aborting retry, max retries exceeded');
             return false;
         }
 
         if ($this->shouldAbortBasedOnRetryAfterHeader($response)) {
-            $this->logger->info('Aborting due to Retry-After header value');
+            $this->logger->info('Aborting retry due to Retry-After header value');
             return false;
         }
 
@@ -60,6 +60,7 @@ class RetryDecider
             return true;
         }
 
+        $this->logger->info('Aborting retry as this error is permanent');
         return false;
     }
 
