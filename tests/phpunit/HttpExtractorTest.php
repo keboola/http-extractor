@@ -40,6 +40,7 @@ class HttpExtractorTest extends TestCase
         $extractor->extract($resource, $destination);
 
         $this->assertSame($content, file_get_contents($destination));
+        $this->assertSame([], $this->testHandler->getRecords());
         $historyItem = array_pop($this->history);
         /** @var Request $request */
         $request = $historyItem['request'];
