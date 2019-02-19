@@ -159,7 +159,7 @@ class RetryDeciderTest extends TestCase
                     null,
                     ['errno' => \CURLE_BAD_DOWNLOAD_RESUME]
                 ),
-                ['Aborting retry as this error is permanent'],
+                [],
             ],
             'no retry for connect exception and more than max retries' => [
                 6,
