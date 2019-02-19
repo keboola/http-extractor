@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Keboola\HttpExtractor\Tests;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use Keboola\Component\Logger;
 use Keboola\Component\UserException;
+use Keboola\HttpExtractor\Client;
 use Keboola\HttpExtractor\HttpExtractor;
 use Keboola\Temp\Temp;
+use Monolog\Handler\TestHandler;
 use PHPUnit\Framework\TestCase;
 use function file_get_contents;
 use function sys_get_temp_dir;
@@ -23,12 +25,15 @@ class HttpExtractorTest extends TestCase
     /** @var mixed[] */
     private $history = [];
 
+    /** @var TestHandler */
+    private $testHandler;
+
     public function testExtractSavesResponseToFile(): void
     {
         $resource = new Uri('http://example.com/result.txt');
         $content = 'File contents';
         $mockedResponse = new Response(200, [], $content);
-        $client = $this->getMockedGuzzle([$mockedResponse]);
+        $client = $this->getMockedExtractorClient([$mockedResponse]);
         $extractor = new HttpExtractor($client, []);
         $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
 
@@ -50,7 +55,7 @@ class HttpExtractorTest extends TestCase
             $mockedResponses[] = new Response(301, ['Location' => 'http://other-url'], $content);
         }
 
-        $client = $this->getMockedGuzzle($mockedResponses);
+        $client = $this->getMockedExtractorClient($mockedResponses);
         $extractor = new HttpExtractor($client, ['maxRedirects' => 2]);
         $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
 
@@ -62,15 +67,24 @@ class HttpExtractorTest extends TestCase
         $extractor->extract($resource, $destination);
     }
 
+    private function getTestLogger(): Logger
+    {
+        $this->testHandler = new TestHandler();
+        $logger = new Logger();
+        $logger->setHandlers([$this->testHandler]);
+        return $logger;
+    }
+
     /**
      * @dataProvider provideUrlsAndExceptions
+     * @param Response[] $mockedResponses
      */
     public function testHttpExceptions(
-        Response $mockedResponse,
+        array $mockedResponses,
         string $exceptionClass,
         string $exceptionMessagePart
     ): void {
-        $client = $this->getMockedGuzzle([$mockedResponse]);
+        $client = $this->getMockedExtractorClient($mockedResponses);
         $extractor = new HttpExtractor($client, []);
         $temp = new Temp();
 
@@ -83,15 +97,17 @@ class HttpExtractorTest extends TestCase
         );
     }
 
-    private function getMockedGuzzle(array $responses): Client
+    private function getMockedExtractorClient(array $responses): Client
     {
         $this->history = [];
         $history = Middleware::history($this->history);
 
+        $this->testHandler = new TestHandler();
+
         $mock = new MockHandler($responses);
         $stack = HandlerStack::create($mock);
         $stack->push($history);
-        return new Client(['handler' => $stack]);
+        return new Client($this->getTestLogger(), ['handler' => $stack]);
     }
 
     /**
@@ -100,23 +116,23 @@ class HttpExtractorTest extends TestCase
     public function provideUrlsAndExceptions(): array
     {
         return [
-            [
-                new Response(404, [], ''),
+            'HTTP 404' => [
+                array_fill(0, 5, new Response(404, [], '')),
                 UserException::class,
                 'Server returned HTTP 404 for "http://example.com"',
             ],
-            [
-                new Response(401, [], ''),
+            'HTTP 401' => [
+                array_fill(0, 5, new Response(401, [], '')),
                 UserException::class,
                 'Server returned HTTP 401 for "http://example.com"',
             ],
-            [
-                new Response(500, [], ''),
+            'HTTP 500' => [
+                array_fill(0, 10, new Response(500, [], '')),
                 UserException::class,
                 'Server returned HTTP 500 for "http://example.com"',
             ],
-            [
-                new Response(503, [], ''),
+            'HTTP 503' => [
+                array_fill(0, 10, new Response(503, [], '')),
                 UserException::class,
                 'Server returned HTTP 503 for "http://example.com"',
             ],
@@ -125,7 +141,9 @@ class HttpExtractorTest extends TestCase
 
     public function testThrowsUserExceptionForNonexistentHost(): void
     {
-        $client = new Client();
+        // real client is used to test real behaviour
+        $client = new \GuzzleHttp\Client();
+
         $extractor = new HttpExtractor($client, []);
         $temp = new Temp();
 
