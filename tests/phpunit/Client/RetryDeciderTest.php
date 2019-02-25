@@ -117,7 +117,7 @@ class RetryDeciderTest extends TestCase
         ?Request $request,
         ?Response $response,
         ?RequestException $exception,
-        string $message
+        array $messages
     ): void {
         $logger = new Logger('test');
         $testHandler = new TestHandler();
@@ -127,8 +127,13 @@ class RetryDeciderTest extends TestCase
         $this->assertFalse(
             $decider($retries, $request, $response, $exception)
         );
-        $this->assertCount(1, $testHandler->getRecords(), var_export($testHandler->getRecords(), true));
-        $this->assertTrue($testHandler->hasInfoThatContains($message), var_export($testHandler->getRecords(), true));
+        $this->assertCount(count($messages), $testHandler->getRecords(), var_export($testHandler->getRecords(), true));
+        foreach ($messages as $message) {
+            $this->assertTrue(
+                $testHandler->hasInfoThatContains($message),
+                var_export($testHandler->getRecords(), true)
+            );
+        }
     }
 
     /**
@@ -142,7 +147,7 @@ class RetryDeciderTest extends TestCase
                 null,
                 new Response(500),
                 null,
-                'Aborting retry, max retries exceeded',
+                ['Aborting retry, max retries exceeded'],
             ],
             'retry for connect exception with not retryable code and less than max retries' => [
                 3,
@@ -154,7 +159,7 @@ class RetryDeciderTest extends TestCase
                     null,
                     ['errno' => \CURLE_BAD_DOWNLOAD_RESUME]
                 ),
-                'Aborting retry as this error is permanent',
+                [],
             ],
             'no retry for connect exception and more than max retries' => [
                 6,
@@ -166,7 +171,7 @@ class RetryDeciderTest extends TestCase
                     null,
                     ['errno' => \CURLE_COULDNT_CONNECT]
                 ),
-                'Aborting retry, max retries exceeded',
+                ['Aborting retry, max retries exceeded'],
             ],
             'don\'t retry with header 2 days in future' => [
                 1,
@@ -175,7 +180,7 @@ class RetryDeciderTest extends TestCase
                     'Retry-after' => (new DateTimeImmutable('2 days'))->format(DATE_RFC1123),
                 ]),
                 null,
-                'Aborting retry due to Retry-After header value',
+                ['Aborting retry due to Retry-After header value'],
             ],
         ];
     }

@@ -60,7 +60,6 @@ class RetryDecider
             return true;
         }
 
-        $this->logger->info('Aborting retry as this error is permanent');
         return false;
     }
 
