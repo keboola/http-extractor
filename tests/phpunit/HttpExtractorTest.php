@@ -159,4 +159,21 @@ class HttpExtractorTest extends TestCase
             $temp->createTmpFile()->getPathname()
         );
     }
+
+    public function testInvalidCertificate(): void
+    {
+        $extractor = new HttpExtractor(new Client($this->getTestLogger()), []);
+        $temp = new Temp();
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(
+            'Error requesting "http://domain.nonexistent/index.html":' .
+            ' cURL error 6: Could not resolve host: domain.nonexistent'
+        );
+
+        $extractor->extract(
+            new Uri('https://opendata.sukl.cz/soubory/SOD20190228/DLP20190228.zip'),
+            $temp->createTmpFile()->getPathname()
+        );
+    }
 }
