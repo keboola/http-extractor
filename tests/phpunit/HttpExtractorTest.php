@@ -68,6 +68,23 @@ class HttpExtractorTest extends TestCase
         $extractor->extract($resource, $destination);
     }
 
+    public function testInvalidUrl(): void
+    {
+        $resource = new Uri('fake://keboola.com');
+
+        $client = $this->getMockedExtractorClient([]);
+        $extractor = new HttpExtractor($client, ['maxRedirects' => 2]);
+
+        $destination = tempnam(sys_get_temp_dir(), 'http_extractor');
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(
+            'This url "fake://keboola.com" is not valid'
+        );
+
+        $extractor->extract($resource, $destination);
+    }
+
     private function getTestLogger(): Logger
     {
         $this->testHandler = new TestHandler();
