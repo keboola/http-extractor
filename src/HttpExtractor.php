@@ -33,14 +33,6 @@ class HttpExtractor
 
     public function extract(UriInterface $httpSource, string $filesystemDestination): void
     {
-        // check is valid URL
-        if (!preg_match('/^https?/', (string) $httpSource)) {
-            throw new UserException(sprintf(
-                'This url "%s" is not valid',
-                (string) $httpSource
-            ));
-        }
-
         try {
             $requestOptions = $this->getRequestOptions();
             $requestOptions['sink'] = $filesystemDestination;
