@@ -26,7 +26,7 @@ class ConfigDefinition extends BaseConfigDefinition
                     ->cannotBeEmpty()
                     ->validate()
                         ->ifTrue(function ($value) {
-                            preg_match('/^([a-z]*)?:\/\//', $value, $match);
+                            preg_match('/^([a-z]*)?:\/\//', strtolower($value), $match);
                             if (isset($match[1])) {
                                 return !in_array($match[1], ['http', 'https']);
                             }
