@@ -127,6 +127,17 @@ class ConfigDefinitionTest extends TestCase
                 'Invalid configuration for path "root.parameters.maxRedirects": ' .
                 'Max redirects must be positive integer',
             ],
+            'mangled protocol' => [
+                [
+                    'parameters' => [
+                        'baseUrl' => 'htt-p://www.google.com',
+                        'path' => 'path',
+                    ],
+                ],
+                InvalidConfigurationException::class,
+                'Invalid configuration for path "root.parameters.baseUrl": ' .
+                'Protocol is not valid. Only http and https are allowed.',
+            ],
         ];
     }
 }
