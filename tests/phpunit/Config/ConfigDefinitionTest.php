@@ -89,11 +89,20 @@ class ConfigDefinitionTest extends TestCase
             'missing url path' => [
                 [
                     'parameters' => [
-                        'baseUrl' => 'path',
+                        'baseUrl' => 'http://www.google.com',
                     ],
                 ],
                 InvalidConfigurationException::class,
                 'The child node "path" at path "root.parameters" must be configured.',
+            ],
+            'invalid url protocol' => [
+                [
+                    'parameters' => [
+                        'baseUrl' => 'fake://www.google.com',
+                    ],
+                ],
+                InvalidConfigurationException::class,
+                'Protocol is not valid. Only http and https are allowed.',
             ],
             'unknown option' => [
                 [

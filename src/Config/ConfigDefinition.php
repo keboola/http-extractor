@@ -24,6 +24,12 @@ class ConfigDefinition extends BaseConfigDefinition
                 ->scalarNode('baseUrl')
                     ->isRequired()
                     ->cannotBeEmpty()
+                    ->validate()
+                        ->ifTrue(function ($value) {
+                            return !preg_match('/^https?:\/\//', $value);
+                        })
+                        ->thenInvalid('Protocol is not valid. Only http and https are allowed.')
+                        ->end()
                 ->end()
                 ->scalarNode('path')
                     ->isRequired()
@@ -35,6 +41,7 @@ class ConfigDefinition extends BaseConfigDefinition
                             return !is_numeric($value) || $value < 0;
                         })
                         ->thenInvalid('Max redirects must be positive integer')
+                        ->end()
                 ->end()
             ->end()
         ;
