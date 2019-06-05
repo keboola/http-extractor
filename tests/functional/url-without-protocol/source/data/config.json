@@ -1,0 +1,12 @@
+{
+    "parameters": {
+        "baseUrl": "www.google.com",
+        "path": "favicon.ico"
+    },
+    "processors": {
+        "before": [],
+        "after": []
+    },
+    "image_parameters": [],
+    "action": "run"
+}
