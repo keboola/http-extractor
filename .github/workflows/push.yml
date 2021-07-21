@@ -1,0 +1,44 @@
+name: GitHub Actions
+on: [ push ]
+env:
+  APP_IMAGE: keboola/ex-http
+  KBC_TEST_PROJECT_URL: "https://connection.keboola.com/admin/projects/4264/extractors"
+  KBC_APP_TEST_CONFIG_WITH_SAVE_AS_HTTP: "352048931"
+  KBC_APP_TEST_CONFIG_WITHOUT_SAVE_AS_HTTPS: "352048478"
+  KBC_DEVELOPERPORTAL_VENDOR: "keboola"
+  KBC_DEVELOPERPORTAL_APP: "keboola.ex-http"
+  KBC_DEVELOPERPORTAL_USERNAME: "keboola+ex_http_ci"
+  KBC_DEVELOPERPORTAL_PASSWORD: ${{ secrets.KBC_DEVELOPERPORTAL_PASSWORD }}
+  DOCKERHUB_USER: "keboolabot"
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  KBC_STORAGE_TOKEN: ${{ secrets.KBC_STORAGE_TOKEN }}
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Print Docker version
+        run: |
+          docker -v
+      - name: Build image
+        run: |
+          docker login --username "$DOCKERHUB_USER" --password "$DOCKERHUB_TOKEN"
+          docker build -t $APP_IMAGE .
+      - name: Run tests
+        run: docker run $APP_IMAGE composer ci
+      - name: Push image to ECR
+        run: |
+          docker pull quay.io/keboola/developer-portal-cli-v2:latest
+          export REPOSITORY=`docker run --rm -e KBC_DEVELOPERPORTAL_USERNAME -e KBC_DEVELOPERPORTAL_PASSWORD -e KBC_DEVELOPERPORTAL_URL quay.io/keboola/developer-portal-cli-v2:latest ecr:get-repository $KBC_DEVELOPERPORTAL_VENDOR $KBC_DEVELOPERPORTAL_APP`
+          docker tag $APP_IMAGE:latest $REPOSITORY:test
+          eval $(docker run --rm -e KBC_DEVELOPERPORTAL_USERNAME -e KBC_DEVELOPERPORTAL_PASSWORD -e KBC_DEVELOPERPORTAL_URL quay.io/keboola/developer-portal-cli-v2:latest ecr:get-login $KBC_DEVELOPERPORTAL_VENDOR $KBC_DEVELOPERPORTAL_APP)
+          docker push $REPOSITORY:test
+          docker pull quay.io/keboola/syrup-cli:latest
+      - name: Run KBC test jobs
+        run: |
+          docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_WITH_SAVE_AS_HTTP test
+          docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_WITHOUT_SAVE_AS_HTTPS test
+      - name: Deploy
+        if: startsWith(github.ref, 'refs/tags/')
+        run: ./deploy.sh
