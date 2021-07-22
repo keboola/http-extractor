@@ -29,6 +29,7 @@
         "guzzlehttp/guzzle": "~6.3",
         "keboola/php-component": "^4.1",
         "keboola/php-utils": "^2.3",
+        "monolog/monolog": "^1.23",
         "symfony/config": "~4.0",
         "symfony/serializer": "~4.0"
     },
