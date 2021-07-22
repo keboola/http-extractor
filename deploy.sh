@@ -33,3 +33,4 @@ then
         update-app-repository ${KBC_DEVELOPERPORTAL_VENDOR} ${KBC_DEVELOPERPORTAL_APP} ${GITHUB_TAG} ecr ${REPOSITORY}
 else
     echo "Skipping deployment to KBC, tag ${GITHUB_TAG} is not allowed."
+fi
