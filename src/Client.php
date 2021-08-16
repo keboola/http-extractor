@@ -28,6 +28,9 @@ class Client extends \GuzzleHttp\Client
         // Timeouts
         $config['connect_timeout'] = 60; // 60 seconds
         $config['timeout'] = 15 * 60 * 60; // 15 minutes
+        $config['headers'] = [
+          'Accept-Encoding' => 'gzip, deflate',
+        ];
 
         // Retry
         $stack->push(Middleware::retry(new RetryDecider($logger), new ExponentialDelay()));
