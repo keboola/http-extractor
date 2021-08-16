@@ -25,9 +25,6 @@ class Client extends \GuzzleHttp\Client
         }
         $stack = $config['handler'];
 
-        // Download file without decoding
-        $config['decode_content'] = false;
-
         // Timeouts
         $config['connect_timeout'] = 60; // 60 seconds
         $config['timeout'] = 15 * 60 * 60; // 15 minutes
