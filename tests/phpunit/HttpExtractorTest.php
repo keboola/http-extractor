@@ -150,8 +150,8 @@ class HttpExtractorTest extends TestCase
 
         $this->expectException(UserException::class);
         $this->expectExceptionMessage(
-            'Error requesting "http://domain.nonexistent/index.html":' .
-            ' cURL error 6: Could not resolve host: domain.nonexistent'
+            'Error requesting "http://domain.nonexistent/index.html": ' .
+            'Guzzle error: cURL error 6: Could not resolve host: domain.nonexistent'
         );
 
         $extractor->extract(
