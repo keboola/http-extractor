@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Keboola\HttpExtractor\Client;
 
 use DateTimeImmutable;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
@@ -28,7 +30,7 @@ class RetryDecider
         int $retries,
         ?Request $request,
         ?Response $response = null,
-        ?RequestException $exception = null
+        ?TransferException $exception = null
     ): bool {
         if ($retries >= self::MAX_RETRIES) {
             $this->logger->info('Aborting retry, max retries exceeded');
@@ -51,7 +53,7 @@ class RetryDecider
         }
 
         if ($this->isRecoverableException($exception)) {
-            if ($exception instanceof RequestException) {
+            if ($exception instanceof RequestException || $exception instanceof ConnectException) {
                 $this->logger->info(sprintf(
                     'Retrying based on CURL error code "%s"',
                     $exception->getHandlerContext()['errno']
@@ -68,19 +70,21 @@ class RetryDecider
         return $response && in_array($response->getStatusCode(), [500, 502, 503, 504, 408, 420, 429]);
     }
 
-    private function isRecoverableException(?RequestException $exception = null): bool
+    private function isRecoverableException(?TransferException $exception = null): bool
     {
-        if (!$exception instanceof RequestException) {
+        if ($exception === null) {
             return false;
         }
 
-        if (!isset($exception->getHandlerContext()['errno'])) {
-            return false;
-        }
+        if ($exception instanceof RequestException || $exception instanceof ConnectException) {
+            if (!isset($exception->getHandlerContext()['errno'])) {
+                return false;
+            }
 
-        $curlErrorNumber = $exception->getHandlerContext()['errno'];
-        if (!$this->isCurlRetryCode($curlErrorNumber)) {
-            return false;
+            $curlErrorNumber = $exception->getHandlerContext()['errno'];
+            if (!$this->isCurlRetryCode($curlErrorNumber)) {
+                return false;
+            }
         }
 
         return true;

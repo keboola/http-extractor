@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Exception;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Keboola\HttpExtractor\Client\RetryDecider;
@@ -24,7 +25,7 @@ class RetryDeciderTest extends TestCase
         int $retries,
         ?Request $request,
         ?Response $response,
-        ?RequestException $exception,
+        ?TransferException $exception,
         ?string $message
     ): void {
         $logger = new Logger('test');
@@ -116,7 +117,7 @@ class RetryDeciderTest extends TestCase
         int $retries,
         ?Request $request,
         ?Response $response,
-        ?RequestException $exception,
+        ?TransferException $exception,
         array $messages
     ): void {
         $logger = new Logger('test');
