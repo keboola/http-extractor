@@ -11,9 +11,9 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\TooManyRedirectsException;
 use Keboola\Component\UserException;
+use Keboola\HttpExtractor\Exception\EncodingException;
 use Psr\Http\Message\UriInterface;
 use function in_array;
-use const CURLE_COULDNT_RESOLVE_HOST;
 
 class HttpExtractor
 {
@@ -33,10 +33,22 @@ class HttpExtractor
 
     public function extract(UriInterface $httpSource, string $filesystemDestination): void
     {
+        $options = $this->getRequestOptions();
+        $options['sink'] = $filesystemDestination;
         try {
-            $requestOptions = $this->getRequestOptions();
-            $requestOptions['sink'] = $filesystemDestination;
-            $this->client->get($httpSource, $requestOptions);
+            $this->sendRequest($httpSource, $options);
+        } catch (EncodingException $e) {
+            // Try to download without content encoding.
+            // Server send invalid Content-Encoding, eg. UTF-8, valid are: gzip, deflate, ...
+            $options['decode_content'] = false;
+            $this->sendRequest($httpSource, $options);
+        }
+    }
+
+    private function sendRequest(UriInterface $httpSource, array $options): void
+    {
+        try {
+            $this->client->get($httpSource, $options);
         } catch (ClientException|ServerException $e) {
             throw new UserException(sprintf(
                 'Server returned HTTP %s for "%s"',
@@ -50,6 +62,10 @@ class HttpExtractor
                 $e->getMessage()
             ), 0, $e);
         } catch (RequestException $e) {
+            if (strpos($e->getMessage(), 'Unrecognized content encoding type.') !== false) {
+                throw new EncodingException($e->getMessage(), $e->getCode(), $e);
+            }
+
             $userErrors = [
                 CURLE_COULDNT_RESOLVE_HOST,
                 CURLE_COULDNT_RESOLVE_PROXY,
