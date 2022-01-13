@@ -74,6 +74,7 @@ class HttpExtractor
                 CURLE_SSL_CONNECT_ERROR,
                 CURLE_GOT_NOTHING,
                 CURLE_RECV_ERROR,
+                CURLE_SSL_CACERT,
             ];
             $context = $e->getHandlerContext();
             if (!isset($context['errno'])) {
