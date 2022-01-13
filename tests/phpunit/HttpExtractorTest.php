@@ -159,4 +159,27 @@ class HttpExtractorTest extends TestCase
             $temp->createTmpFile()->getPathname()
         );
     }
+
+    public function testThrowsUserExceptionForNonValidCert(): void
+    {
+        // real client is used to test real behaviour
+        $client = new \GuzzleHttp\Client();
+
+        $invalidHostResolve = [
+            CURLOPT_RESOLVE => ['keboola.com:443:142.251.36.68'], // 142.251.36.68 = https://www.google.com
+        ];
+        $extractor = new HttpExtractor($client, ['curl' => $invalidHostResolve]);
+        $temp = new Temp();
+
+        $this->expectException(UserException::class);
+        $this->expectExceptionMessage(
+            'Error requesting "https://keboola.com": ' .
+            'cURL error 60: SSL: no alternative certificate subject name matches target host name \'keboola.com\''
+        );
+
+        $extractor->extract(
+            new Uri('https://keboola.com'),
+            $temp->createTmpFile()->getPathname()
+        );
+    }
 }

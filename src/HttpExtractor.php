@@ -113,6 +113,9 @@ class HttpExtractor
                 'max' => $this->clientOptions['maxRedirects'],
             ];
         }
+        if (isset($this->clientOptions['curl'])) {
+            $requestOptions['curl'] = $this->clientOptions['curl'];
+        }
         return $requestOptions;
     }
 }
