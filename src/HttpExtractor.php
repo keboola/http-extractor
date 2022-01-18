@@ -74,6 +74,7 @@ class HttpExtractor
                 CURLE_SSL_CONNECT_ERROR,
                 CURLE_GOT_NOTHING,
                 CURLE_RECV_ERROR,
+                CURLE_SSL_CACERT,
             ];
             $context = $e->getHandlerContext();
             if (!isset($context['errno'])) {
@@ -111,6 +112,9 @@ class HttpExtractor
             $requestOptions['allow_redirects'] = [
                 'max' => $this->clientOptions['maxRedirects'],
             ];
+        }
+        if (isset($this->clientOptions['curl'])) {
+            $requestOptions['curl'] = $this->clientOptions['curl'];
         }
         return $requestOptions;
     }
